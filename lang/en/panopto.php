@@ -26,7 +26,7 @@
 
 $string['pluginname'] = 'Panopto';
 $string['usereposettings'] = 'Use Panopto repository settings for Panopto server configuration details.';
-$string['modulename'] = 'Panopto resource';
-$string['modulename_help'] = 'The Panopto module enables a teacher to create a reference to Panopto video.';
+$string['modulename'] = 'Panopto video';
+$string['modulename_help'] = 'The Panopto resource enables a teacher to create a reference to any Panopto video. Just pick the video using repository navigation interface and any student who have access to this resource in Moodle will be able to watch the video on Panopto server.';
 $string['modulename_link'] = 'mod/page/view';
-$string['modulenameplural'] = 'Panopto resources';
+$string['modulenameplural'] = 'Panopto videos';
