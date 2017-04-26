@@ -27,6 +27,9 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
+require_once(dirname(__FILE__).'/form/panoptopicker.php');
+MoodleQuickForm::registerElementType('panoptopicker', $CFG->dirroot.'/mod/panopto/form/panoptopicker.php',
+    'moodlequickform_panoptopicker');
 
 class mod_panopto_mod_form extends moodleform_mod {
 
@@ -44,11 +47,15 @@ class mod_panopto_mod_form extends moodleform_mod {
         }
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $this->standard_intro_elements();
+
+        // Add Panoptopicker custom element.
+        $mform->addElement('panoptopicker', 'panoptosessionid', get_string('video', 'panopto'));
+        $mform->setType('panoptosessionid', PARAM_RAW_TRIMMED);
+        $mform->addRule('panoptosessionid', null, 'required', null, 'client');
 
         // Standard coursemodule things.
+        $this->standard_intro_elements();
         $this->standard_coursemodule_elements();
-
         $this->add_action_buttons();
     }
 }

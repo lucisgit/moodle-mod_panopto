@@ -24,9 +24,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Panopto';
-$string['usereposettings'] = 'Use Panopto repository settings for Panopto server configuration details.';
+$string['chooseavideo'] = 'Choose Panopto Video';
 $string['modulename'] = 'Panopto video';
 $string['modulename_help'] = 'The Panopto resource enables a teacher to create a reference to any Panopto video. Just pick the video using repository navigation interface and any student who have access to this resource in Moodle will be able to watch the video on Panopto server.';
 $string['modulename_link'] = 'mod/page/view';
 $string['modulenameplural'] = 'Panopto videos';
+$string['pluginadministration'] = 'Panopto module administration';
+$string['pluginname'] = 'Panopto';
+$string['usereposettings'] = 'Use Panopto repository settings for Panopto server configuration details.';
+$string['video'] = 'Video';
