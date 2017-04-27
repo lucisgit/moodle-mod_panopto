@@ -96,16 +96,26 @@ class MoodleQuickForm_panoptopicker extends HTML_QuickForm_input{
         // Initialise filepicker.
         $client_id = uniqid();
         $args = new stdClass();
-        $args->accepted_types = '.panopto';
         $args->return_types = FILE_EXTERNAL;
         $args->context = $PAGE->context;
         $args->client_id = $client_id;
         $args->env = 'panoptopicker';
         $fp = new file_picker($args);
+
+        // Override repositories list and make Panopto repository the only listed.
+        $fp->options->repositories = array();
+        $repositories = repository::get_instances(array(
+            'currentcontext'=> $PAGE->context,
+            'type' => 'panopto',
+            'onlyvisible' => false,
+        ));
+        foreach ($repositories as $repository) {
+            $meta = $repository->get_meta();
+            $fp->options->repositories[$repository->id] = $meta;
+        }
+
         $options = $fp->options;
-
         $str .= '<input type="hidden" name="'.$this->getName().'" id="'.$this->getAttribute('id').'" value="'.$this->getValue().'" />';
-
         if (count($options->repositories) > 0) {
             $straddlink = get_string('chooseavideo', 'panopto');
             $str .= <<<EOD
