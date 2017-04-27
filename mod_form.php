@@ -27,9 +27,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
-require_once(dirname(__FILE__).'/form/panoptopicker.php');
-MoodleQuickForm::registerElementType('panoptopicker', $CFG->dirroot.'/mod/panopto/form/panoptopicker.php',
-    'moodlequickform_panoptopicker');
+require_once($CFG->dirroot . '/repository/panopto/form/panoptopicker.php');
 
 class mod_panopto_mod_form extends moodleform_mod {
 
