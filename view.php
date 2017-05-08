@@ -27,6 +27,7 @@
 require('../../config.php');
 require_once($CFG->dirroot.'/mod/panopto/lib.php');
 require_once($CFG->libdir . '/completionlib.php');
+require_once($CFG->dirroot . "/repository/panopto/locallib.php");
 
 $id = required_param('id', PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'panopto');
@@ -53,4 +54,24 @@ $completion->set_module_viewed($cm);
 
 $PAGE->set_url('/mod/panopto/view.php', array('id' => $cm->id));
 
-var_dump($panopto);
+// Instantiate Panopto client.
+$panoptoclient = new repository_panopto_interface();
+
+// Set authentication to Panopto admin.
+$panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
+
+// Perform the call to Panopto API to obtain viewer url.
+$session = $panoptoclient->get_session_by_id($panopto->panoptosessionid);
+if (!$session) {
+    throw new invalid_parameter_exception(get_string('errorsessionnotfound', 'repository_panopto'));
+}
+
+// Swith user to the current one.
+$panoptoclient->set_authentication_info(
+        get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
+
+// Perform the call to Panopto API to obtain authenticated url.
+$authurl = $panoptoclient->get_authenticated_url($session->getViewerUrl());
+
+// Redirect user to the session page on Panopto side.
+redirect($authurl);
