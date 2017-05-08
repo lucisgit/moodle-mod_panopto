@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Panopto course module version information.
+ * Panopto course module events.
  *
  * @package    mod_panopto
  * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
@@ -26,11 +26,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017052401;    // The current module version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016052300;    // Requires Moodle 3.1
-$plugin->component = 'mod_panopto'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity  = MATURITY_BETA; // Maturity Level is currently Release Candidate.
-
-$plugin->dependencies = array(
-    'repository_panopto' => ANY_VERSION
+$observers = array (
+    array (
+        'eventname' => '\core\event\course_module_created',
+        'callback'  => '\mod_panopto\event\observer::course_module_created',
+        'internal'  => false, // This means that we get events only after transaction commit.
+        'priority'  => 1000,
+    ),
+    array (
+        'eventname' => '\core\event\course_module_updated',
+        'callback'  => '\mod_panopto\event\observer::course_module_updated',
+        'internal'  => false, // This means that we get events only after transaction commit.
+        'priority'  => 1000,
+    ),
+    array (
+        'eventname' => '\core\event\course_module_deleted',
+        'callback'  => '\mod_panopto\event\observer::course_module_deleted',
+        'internal'  => false, // This means that we get events only after transaction commit.
+        'priority'  => 1000,
+    ),
 );
