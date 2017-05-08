@@ -95,6 +95,9 @@ function panopto_add_instance($data, $mform) {
     $data->timemodified = time();
     $data->id = $DB->insert_record('panopto', $data);
 
+    // See \mod_panopto\event\observer::course_module_created for Panopto API calls
+    // made after instance has been created.
+
     return $data->id;
 }
 
@@ -109,7 +112,7 @@ function panopto_update_instance($data, $mform) {
     global $DB;
 
     $data->timemodified = time();
-    $data->id           = $data->instance;
+    $data->id = $data->instance;
 
     $DB->update_record('panopto', $data);
 

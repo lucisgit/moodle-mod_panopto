@@ -33,12 +33,34 @@ namespace mod_panopto\event;
  */
 class observer {
 
+    private static function get_repository_panopto_interface() {
+        global $CFG;
+        require_once($CFG->dirroot . "/repository/panopto/locallib.php");
+        // Instantiate Panopto client.
+        $panoptoclient = new \repository_panopto_interface();
+        // Set authentication to Panopto admin.
+        $panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
+        return $panoptoclient;
+    }
     /**
      * Listen to events and make required Panopto API calls.
      * @param \core\event\course_module_created $event
      */
     public static function course_module_created(\core\event\course_module_created $event) {
-        var_dump($event);
+        global $DB;
+        if ($event->other['modulename'] === 'panopto') {
+            $groupname = get_config('panopto', 'instancename') . '_cmid_' . $event->objectid;
+            $panoptoclient = self::get_repository_panopto_interface();
+            $group = $panoptoclient->create_external_group($groupname);
+
+            // Update db record with Panopto group id.
+            $data = $DB->get_record('panopto', array('id'=> $event->other['instanceid']), '*', MUST_EXIST);
+            $data->panoptoextgroupid = $group->getId();
+            $DB->update_record('panopto', $data);
+
+            // Grant group access to the session.
+            $panoptoclient->grant_group_viewer_access_to_session($group->getId(), $data->panoptosessionid);
+        }
     }
 
     /**

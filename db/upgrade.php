@@ -72,5 +72,16 @@ function xmldb_panopto_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2017052400, 'panopto');
     }
 
+    if ($oldversion < 2017052402) {
+        // Add field for storing external group id.
+        $table = new xmldb_table('panopto');
+        $field = new xmldb_field('panoptoextgroupid', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Panopto savepoint reached.
+        upgrade_mod_savepoint(true, 2017052402, 'panopto');
+    }
+
     return true;
 }
