@@ -109,11 +109,30 @@ function panopto_add_instance($data, $mform) {
  * @return bool true
  */
 function panopto_update_instance($data, $mform) {
-    global $DB;
+    global $DB, $CFG;
 
-    $data->timemodified = time();
+    // Get existing instance record.
+    if (!$panopto = $DB->get_record('panopto', array('id' => $data->instance))) {
+        return false;
+    }
+
+    // TODO: Create a special event type for this API call and its proper logging.
+    // If session has been changed, move group to the new session in Panopto.
+    if ($panopto->panoptosessionid !== $data->panoptosessionid) {
+        // Instantiate Panopto client.
+        require_once($CFG->dirroot . "/repository/panopto/locallib.php");
+        $panoptoclient = new \repository_panopto_interface();
+        // Set authentication to Panopto admin.
+        $panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
+        // Revoke group access from the previous session.
+        $panoptoclient->revoke_group_viewer_access_from_session($panopto->panoptoextgroupid, $panopto->panoptosessionid);
+        // Grant group access to the new session.
+        $panoptoclient->grant_group_viewer_access_to_session($panopto->panoptoextgroupid, $data->panoptosessionid);
+    }
+
+    // Update instance record.
     $data->id = $data->instance;
-
+    $data->timemodified = time();
     $DB->update_record('panopto', $data);
 
     return true;
@@ -128,18 +147,20 @@ function panopto_update_instance($data, $mform) {
 function panopto_delete_instance($id) {
     global $DB, $CFG;
 
+    // Get existing instance record.
     if (!$panopto = $DB->get_record('panopto', array('id' => $id))) {
         return false;
     }
 
+    // TODO: Create a special event type for this API call and its proper logging.
     // Instantiate Panopto client.
     require_once($CFG->dirroot . "/repository/panopto/locallib.php");
     $panoptoclient = new \repository_panopto_interface();
     // Set authentication to Panopto admin.
     $panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
-    // Delete group.
-    $panoptoclient->delete_group($panopto->panoptoextgroupid);
 
+    // Delete group and instance record.
+    $panoptoclient->delete_group($panopto->panoptoextgroupid);
     $DB->delete_records('panopto', array('id' => $panopto->id));
 
     return true;
