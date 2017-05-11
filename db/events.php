@@ -33,16 +33,4 @@ $observers = array (
         'internal'  => false, // This means that we get events only after transaction commit.
         'priority'  => 1000,
     ),
-    array (
-        'eventname' => '\core\event\course_module_updated',
-        'callback'  => '\mod_panopto\event\observer::course_module_updated',
-        'internal'  => false, // This means that we get events only after transaction commit.
-        'priority'  => 1000,
-    ),
-    array (
-        'eventname' => '\core\event\course_module_deleted',
-        'callback'  => '\mod_panopto\event\observer::course_module_deleted',
-        'internal'  => false, // This means that we get events only after transaction commit.
-        'priority'  => 1000,
-    ),
 );

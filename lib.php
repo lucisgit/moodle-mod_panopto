@@ -126,11 +126,19 @@ function panopto_update_instance($data, $mform) {
  * @return bool true
  */
 function panopto_delete_instance($id) {
-    global $DB;
+    global $DB, $CFG;
 
     if (!$panopto = $DB->get_record('panopto', array('id' => $id))) {
         return false;
     }
+
+    // Instantiate Panopto client.
+    require_once($CFG->dirroot . "/repository/panopto/locallib.php");
+    $panoptoclient = new \repository_panopto_interface();
+    // Set authentication to Panopto admin.
+    $panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
+    // Delete group.
+    $panoptoclient->delete_group($panopto->panoptoextgroupid);
 
     $DB->delete_records('panopto', array('id' => $panopto->id));
 

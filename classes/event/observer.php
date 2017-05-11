@@ -62,20 +62,4 @@ class observer {
             $panoptoclient->grant_group_viewer_access_to_session($group->getId(), $data->panoptosessionid);
         }
     }
-
-    /**
-     * Listen to events and make required Panopto API calls.
-     * @param \core\event\course_module_updated $event
-     */
-    public static function course_module_updated(\core\event\course_module_updated $event) {
-        var_dump($event);
-    }
-
-    /**
-     * Listen to events and make required Panopto API calls.
-     * @param \core\event\course_module_deleted $event
-     */
-    public static function course_module_deleted(\core\event\course_module_deleted $event) {
-        var_dump($event);
-    }
 }
