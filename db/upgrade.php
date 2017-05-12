@@ -83,5 +83,47 @@ function xmldb_panopto_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2017052402, 'panopto');
     }
 
+    if ($oldversion < 2017052404) {
+
+        // Define table panopto_user_access to be created.
+        $table = new xmldb_table('panopto_user_access');
+
+        // Adding fields to table panopto_user_access.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('panoptouserid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('panoptoextgroupid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timeaccessed', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table panopto_user_access.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Adding indexes to table panopto_user_access.
+        $table->add_index('timeaccessed', XMLDB_INDEX_NOTUNIQUE, array('timeaccessed'));
+        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
+        $table->add_index('useridpanoptoextgroupid', XMLDB_INDEX_UNIQUE, array('userid', 'panoptoextgroupid'));
+
+        // Conditionally launch create table for panopto_user_access.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Changing type of field panoptosessionid on table panopto to char.
+        $table = new xmldb_table('panopto');
+        $field = new xmldb_field('panoptosessionid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'introformat');
+        // Launch change of type for field panoptosessionid.
+        $dbman->change_field_type($table, $field);
+
+        // Changing type of field panoptoextgroupid on table panopto to char.
+        $table = new xmldb_table('panopto');
+        $field = new xmldb_field('panoptoextgroupid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'panoptosessionid');
+        // Launch change of type for field panoptoextgroupid.
+        $dbman->change_field_type($table, $field);
+
+        // Panopto savepoint reached.
+        upgrade_mod_savepoint(true, 2017052404, 'panopto');
+    }
+
+
     return true;
 }
