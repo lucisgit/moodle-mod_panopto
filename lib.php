@@ -117,7 +117,7 @@ function panopto_update_instance($data, $mform) {
     }
 
     // TODO: Create a special event type for this API call and its proper logging.
-    // If session has been changed, move group to the new session in Panopto.
+    // If session has been changed, move this course module external group to the new session in Panopto.
     if ($panopto->panoptosessionid !== $data->panoptosessionid) {
         // Instantiate Panopto client.
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
@@ -159,7 +159,7 @@ function panopto_delete_instance($id) {
     // Set authentication to Panopto admin.
     $panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
 
-    // Delete group and instance record.
+    // Delete course module external group and instance record.
     $panoptoclient->delete_group($panopto->panoptoextgroupid);
     $DB->delete_records('panopto', array('id' => $panopto->id));
 

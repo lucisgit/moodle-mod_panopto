@@ -49,6 +49,7 @@ class observer {
     public static function course_module_created(\core\event\course_module_created $event) {
         global $DB;
         if ($event->other['modulename'] === 'panopto') {
+            // Create unique external group for this course module.
             $groupname = get_config('panopto', 'instancename') . '_cmid_' . $event->objectid;
             $panoptoclient = self::get_repository_panopto_interface();
             $group = $panoptoclient->create_external_group($groupname);
@@ -58,7 +59,7 @@ class observer {
             $data->panoptoextgroupid = $group->getId();
             $DB->update_record('panopto', $data);
 
-            // Grant group access to the session.
+            // Grant group access to the session we wish to use in this coursemodule.
             $panoptoclient->grant_group_viewer_access_to_session($group->getId(), $data->panoptosessionid);
         }
     }
