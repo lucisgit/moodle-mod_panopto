@@ -66,6 +66,25 @@ if (!$session) {
     throw new invalid_parameter_exception(get_string('errorsessionnotfound', 'repository_panopto'));
 }
 
+// Grant access to the unique course module external group.
+$panoptoaccess = $DB->get_record('panopto_user_access', array('userid'=> $USER->id, 'panoptoextgroupid' => $panopto->panoptoextgroupid));
+if ($panoptoaccess) {
+    // Access mapping exist, update access timestamp.
+    $panoptoaccess->timeaccessed = time();
+    $DB->update_record('panopto_user_access', $panoptoaccess);
+} else {
+    // User needs to be added to the group and access mapping record needs to be created.
+    $panoptouser = $panoptoclient->sync_current_user();
+    $panoptoclient->add_member_to_external_group($panopto->panoptoextgroupid, $panoptouser->getUserId());
+
+    $panoptoaccess = new \stdClass();
+    $panoptoaccess->userid = $USER->id;
+    $panoptoaccess->panoptouserid = $panoptouser->getUserId();
+    $panoptoaccess->panoptoextgroupid = $panopto->panoptoextgroupid;
+    $panoptoaccess->timeaccessed = time();
+    $DB->insert_record('panopto_user_access', $panoptoaccess);
+}
+
 // Swith user to the current one.
 $panoptoclient->set_authentication_info(
         get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
