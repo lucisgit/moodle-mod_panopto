@@ -16,7 +16,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Panopto course module version information.
+ * Panopto course module definition of tasks.
  *
  * @package    mod_panopto
  * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
@@ -26,11 +26,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017052405;    // The current module version (Date: YYYYMMDDXX)
-$plugin->requires  = 2016052300;    // Requires Moodle 3.1
-$plugin->component = 'mod_panopto'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity  = MATURITY_BETA; // Maturity Level is currently Release Candidate.
-
-$plugin->dependencies = array(
-    'repository_panopto' => ANY_VERSION
+$tasks = array(
+    array(
+        'classname' => 'mod_panopto\task\cron_task',
+        'blocking' => 1,
+        'minute' => '0',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*'
+    )
 );

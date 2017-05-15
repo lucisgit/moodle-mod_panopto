@@ -32,4 +32,20 @@ if ($ADMIN->fulltree) {
     $link = html_writer::link(new moodle_url('/admin/repository.php', array('repos' => 'panopto', 'action' => 'edit')),
             get_string('usereposettings', 'panopto'));
     $settings->add(new admin_setting_heading('panoptomodsettingslink', '', $link));
+
+    $name = new lang_string('requiredaccesstime', 'mod_panopto');
+    $options = array(
+        -1 => new lang_string('unlimited', 'mod_panopto'),
+        1 => new lang_string('numhours', '', 1),
+        2 => new lang_string('numhours', '', 2),
+        6 => new lang_string('numhours', '', 6),
+        12 => new lang_string('numhours', '', 12),
+        24 => new lang_string('numhours', '', 24),
+    );
+    $description = new lang_string('requiredaccesstime_desc', 'mod_panopto');
+    $settings->add(new admin_setting_configselect('panopto/requiredaccesstime',
+                                                    $name,
+                                                    $description,
+                                                    1,
+                                                    $options));
 }
