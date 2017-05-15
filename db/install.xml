@@ -12,7 +12,7 @@
         <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="panoptosessionid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
-        <FIELD NAME="panoptoextgroupid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="panoptogroupid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
@@ -27,7 +27,8 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
         <FIELD NAME="panoptouserid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
-        <FIELD NAME="panoptoextgroupid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="panoptogroupid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="panoptoextgroupid" TYPE="text" NOTNULL="false" SEQUENCE="false" />
         <FIELD NAME="timeaccessed" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
       </FIELDS>
       <KEYS>
@@ -36,7 +37,7 @@
       <INDEXES>
         <INDEX NAME="timeaccessed" UNIQUE="false" FIELDS="timeaccessed" />
         <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" />
-        <INDEX NAME="useridpanoptoextgroupid" UNIQUE="true" FIELDS="userid, panoptoextgroupid" />
+        <INDEX NAME="useridpanoptogroupid" UNIQUE="true" FIELDS="userid, panoptogroupid" />
       </INDEXES>
     </TABLE>
   </TABLES>

@@ -54,7 +54,7 @@ class observer {
 
             // Update db record with Panopto group id.
             $data = $DB->get_record('panopto', array('id'=> $event->other['instanceid']), '*', MUST_EXIST);
-            $data->panoptoextgroupid = $group->getId();
+            $data->panoptogroupid = $group->getId();
             $DB->update_record('panopto', $data);
 
             // Grant group access to the session we wish to use in this coursemodule.

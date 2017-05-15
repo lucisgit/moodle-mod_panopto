@@ -123,9 +123,9 @@ function panopto_update_instance($data, $mform) {
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
         $panoptoclient = new \repository_panopto_interface();
         // Revoke group access from the previous session.
-        $panoptoclient->revoke_group_viewer_access_from_session($panopto->panoptoextgroupid, $panopto->panoptosessionid);
+        $panoptoclient->revoke_group_viewer_access_from_session($panopto->panoptogroupid, $panopto->panoptosessionid);
         // Grant group access to the new session.
-        $panoptoclient->grant_group_viewer_access_to_session($panopto->panoptoextgroupid, $data->panoptosessionid);
+        $panoptoclient->grant_group_viewer_access_to_session($panopto->panoptogroupid, $data->panoptosessionid);
     }
 
     // Update instance record.
@@ -155,7 +155,7 @@ function panopto_delete_instance($id) {
     require_once($CFG->dirroot . "/repository/panopto/locallib.php");
     $panoptoclient = new \repository_panopto_interface();
     // Delete course module external group and instance record.
-    $panoptoclient->delete_group($panopto->panoptoextgroupid);
+    $panoptoclient->delete_group($panopto->panoptogroupid);
     $DB->delete_records('panopto', array('id' => $panopto->id));
 
     return true;

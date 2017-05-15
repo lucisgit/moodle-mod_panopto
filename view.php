@@ -67,7 +67,7 @@ if (!$session) {
 }
 
 // Grant access to the unique course module external group.
-$panoptoaccess = $DB->get_record('panopto_user_access', array('userid'=> $USER->id, 'panoptoextgroupid' => $panopto->panoptoextgroupid));
+$panoptoaccess = $DB->get_record('panopto_user_access', array('userid'=> $USER->id, 'panoptogroupid' => $panopto->panoptogroupid));
 if ($panoptoaccess) {
     // Access mapping exist, update access timestamp.
     $panoptoaccess->timeaccessed = time();
@@ -81,7 +81,8 @@ if ($panoptoaccess) {
     $panoptoaccess = new \stdClass();
     $panoptoaccess->userid = $USER->id;
     $panoptoaccess->panoptouserid = $panoptouser->getUserId();
-    $panoptoaccess->panoptoextgroupid = $panopto->panoptoextgroupid;
+    $panoptoaccess->panoptogroupid = $panopto->panoptogroupid;
+    $panoptoaccess->panoptoextgroupid = $groupexternalid;
     $panoptoaccess->timeaccessed = time();
     $DB->insert_record('panopto_user_access', $panoptoaccess);
 }
