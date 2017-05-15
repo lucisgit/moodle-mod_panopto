@@ -56,12 +56,12 @@ $PAGE->set_url('/mod/panopto/view.php', array('id' => $cm->id));
 
 // Instantiate Panopto client.
 $panoptoclient = new repository_panopto_interface();
-
-// Set authentication to Panopto admin.
-$panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
+// Set current user.
+$panoptoclient->set_authentication_info(
+        get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
 
 // Perform the call to Panopto API to obtain viewer url.
-$session = $panoptoclient->get_session_by_id($panopto->panoptosessionid);
+$session = $panoptoclient->get_session_by_id($panopto->panoptosessionid, true);
 if (!$session) {
     throw new invalid_parameter_exception(get_string('errorsessionnotfound', 'repository_panopto'));
 }
@@ -75,7 +75,8 @@ if ($panoptoaccess) {
 } else {
     // User needs to be added to the group and access mapping record needs to be created.
     $panoptouser = $panoptoclient->sync_current_user();
-    $panoptoclient->add_member_to_external_group($panopto->panoptoextgroupid, $panoptouser->getUserId());
+    $groupexternalid = get_config('panopto', 'instancename') . '_cmid_' . $cm->id;
+    $panoptoclient->add_member_to_external_group($groupexternalid, $panoptouser->getUserId());
 
     $panoptoaccess = new \stdClass();
     $panoptoaccess->userid = $USER->id;
@@ -84,10 +85,6 @@ if ($panoptoaccess) {
     $panoptoaccess->timeaccessed = time();
     $DB->insert_record('panopto_user_access', $panoptoaccess);
 }
-
-// Swith user to the current one.
-$panoptoclient->set_authentication_info(
-        get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
 
 // Perform the call to Panopto API to obtain authenticated url.
 $authurl = $panoptoclient->get_authenticated_url($session->getViewerUrl());

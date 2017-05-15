@@ -38,8 +38,6 @@ class observer {
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
         // Instantiate Panopto client.
         $panoptoclient = new \repository_panopto_interface();
-        // Set authentication to Panopto admin.
-        $panoptoclient->set_authentication_info(get_config('panopto', 'userkey'), get_config('panopto', 'password'));
         return $panoptoclient;
     }
     /**
