@@ -157,6 +157,7 @@ function panopto_delete_instance($id) {
     // Delete course module external group and instance record.
     $panoptoclient->delete_group($panopto->panoptogroupid);
     $DB->delete_records('panopto', array('id' => $panopto->id));
+    $DB->delete_records('panopto_user_access', array('panoptogroupid' => $panopto->panoptogroupid));
 
     return true;
 }
