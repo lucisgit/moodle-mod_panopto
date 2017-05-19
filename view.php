@@ -87,6 +87,9 @@ if ($panoptoaccess) {
     $DB->insert_record('panopto_user_access', $panoptoaccess);
 }
 
+// Make sure that group is linked to session.
+$panoptoclient->grant_group_viewer_access_to_session($panopto->panoptogroupid, $panopto->panoptosessionid);
+
 // Perform the call to Panopto API to obtain authenticated url.
 $authurl = $panoptoclient->get_authenticated_url($session->getViewerUrl());
 
