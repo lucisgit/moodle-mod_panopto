@@ -52,40 +52,39 @@ function xmldb_panopto_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2017052400) {
-        // Internal upgrade for the old panopto mod.
+    if ($oldversion < 2017052405) {
+        // Internal upgrade for the old panopto mod. externalpanopto filed contained the full URL,
+        // we replace it with Panopto sesssion id (which is a URL param of the filed content).
         $panoptoresources = $DB->get_records('panopto');
         foreach ($panoptoresources as $panoptoresource) {
-            $url = new \moodle_url($panoptoresource->externalpanopto);
-            $panoptoresource->externalpanopto = $url->get_param('id');
-            $DB->update_record('panopto', $panoptoresource);
+            if (!empty($panoptoresource->externalpanopto)) {
+                $url = new \moodle_url($panoptoresource->externalpanopto);
+                $panoptoresource->externalpanopto = $url->get_param('id');
+                $DB->update_record('panopto', $panoptoresource);
+            } else {
+                $DB->delete_record('panopto', array('id' => $panoptoresource->id));
+            }
         }
 
-        // Rename the field.
+        // Rename the field externalpanopto to panoptosessionid and change its type.
         $table = new xmldb_table('panopto');
-        $field = new xmldb_field('externalpanopto', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $field = new xmldb_field('externalpanopto', XMLDB_TYPE_TEXT);
         if ($dbman->field_exists($table, $field)) {
             $dbman->rename_field($table, $field, 'panoptosessionid');
+            // Changing type of field panoptosessionid on table panopto to char.
+            $field = new xmldb_field('panoptosessionid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'introformat');
+            // Launch change of type for field panoptosessionid.
+            $dbman->change_field_type($table, $field);
         }
 
-        // Panopto savepoint reached.
-        upgrade_mod_savepoint(true, 2017052400, 'panopto');
-    }
-
-    if ($oldversion < 2017052402) {
-        // Add field for storing external group id.
+        // Add field for storing Panopto group id.
         $table = new xmldb_table('panopto');
-        $field = new xmldb_field('panoptoextgroupid', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $field = new xmldb_field('panoptogroupid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'panoptosessionid');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-        // Panopto savepoint reached.
-        upgrade_mod_savepoint(true, 2017052402, 'panopto');
-    }
 
-    if ($oldversion < 2017052404) {
-
-        // Define table panopto_user_access to be created.
+        // Define table panopto_user_access and create.
         $table = new xmldb_table('panopto_user_access');
 
         // Adding fields to table panopto_user_access.
@@ -93,6 +92,7 @@ function xmldb_panopto_upgrade($oldversion) {
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('panoptouserid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null);
         $table->add_field('panoptogroupid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('panoptoextgroupid', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
         $table->add_field('timeaccessed', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table panopto_user_access.
@@ -108,35 +108,6 @@ function xmldb_panopto_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-        // Changing type of field panoptosessionid on table panopto to char.
-        $table = new xmldb_table('panopto');
-        $field = new xmldb_field('panoptosessionid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'introformat');
-        // Launch change of type for field panoptosessionid.
-        $dbman->change_field_type($table, $field);
-
-        // Changing type of field panoptoextgroupid on table panopto to char.
-        $table = new xmldb_table('panopto');
-        $field = new xmldb_field('panoptoextgroupid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'panoptosessionid');
-        // Launch change of type for field panoptoextgroupid.
-        $dbman->change_field_type($table, $field);
-
-        // Panopto savepoint reached.
-        upgrade_mod_savepoint(true, 2017052404, 'panopto');
-    }
-
-    if ($oldversion < 2017052405) {
-        // Rename the extgroupid field to groupid.
-        $table = new xmldb_table('panopto');
-        $field = new xmldb_field('panoptoextgroupid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null, 'panoptosessionid');
-        if ($dbman->field_exists($table, $field)) {
-            $dbman->rename_field($table, $field, 'panoptogroupid');
-        }
-        // Add field for storing externalgroupid
-        $table = new xmldb_table('panopto_user_access');
-        $field = new xmldb_field('panoptoextgroupid', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
         // Panopto savepoint reached.
         upgrade_mod_savepoint(true, 2017052405, 'panopto');
     }
