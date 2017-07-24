@@ -32,33 +32,16 @@ namespace mod_panopto\event;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer {
-
-    private static function get_repository_panopto_interface() {
-        global $CFG;
-        require_once($CFG->dirroot . "/repository/panopto/locallib.php");
-        // Instantiate Panopto client.
-        $panoptoclient = new \repository_panopto_interface();
-        return $panoptoclient;
-    }
     /**
-     * Listen to events and make required Panopto API calls.
+     * Listen to course_module_created event and make callback call to finish instance setup.
+     *
      * @param \core\event\course_module_created $event
      */
     public static function course_module_created(\core\event\course_module_created $event) {
-        global $DB;
+        global $CFG;
         if ($event->other['modulename'] === 'panopto') {
-            // Create unique external group for this course module.
-            $groupname = get_config('panopto', 'instancename') . '_cmid_' . $event->objectid;
-            $panoptoclient = self::get_repository_panopto_interface();
-            $group = $panoptoclient->create_external_group($groupname);
-
-            // Update db record with Panopto group id.
-            $data = $DB->get_record('panopto', array('id'=> $event->other['instanceid']), '*', MUST_EXIST);
-            $data->panoptogroupid = $group->getId();
-            $DB->update_record('panopto', $data);
-
-            // Grant group access to the session we wish to use in this coursemodule.
-            $panoptoclient->grant_group_viewer_access_to_session($group->getId(), $data->panoptosessionid);
+            require_once($CFG->dirroot . "/repository/panopto/locallib.php");
+            panopto_instance_created_callback($event->objectid, $event->other['instanceid']);
         }
     }
 }

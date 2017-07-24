@@ -95,10 +95,45 @@ function panopto_add_instance($data, $mform) {
     $data->timemodified = time();
     $data->id = $DB->insert_record('panopto', $data);
 
-    // See \mod_panopto\event\observer::course_module_created for Panopto API calls
+    // See \mod_panopto\event\observer::course_module_created for calls
     // made after instance has been created.
 
     return $data->id;
+}
+
+/**
+ * Callback function for Panopto instance create event.
+ *
+ * This effectively a call to Panopto API for creating the unique external group
+ * for this coursemodule and add it to recorded session we wish to use in this activity.
+ *
+ * @param int $cmid coursemodule id
+ * @param int $instanceid id of the record in mod_panopto table.
+ * @return bool true
+ */
+function panopto_instance_created_callback($cmid, $instanceid) {
+    global $DB, $CFG;
+
+    // Get existing instance record.
+    if (!$data = $DB->get_record('panopto', array('id' => $instanceid))) {
+        return false;
+    }
+
+    // Instantiate Panopto client.
+    require_once($CFG->dirroot . "/repository/panopto/locallib.php");
+    $panoptoclient = new \repository_panopto_interface();
+    // Create unique external group for this course module.
+    $groupname = get_config('panopto', 'instancename') . '_cmid_' . $cmid;
+    $group = $panoptoclient->create_external_group($groupname);
+
+    // Update db record with Panopto group id.
+    $data->panoptogroupid = $group->getId();
+    $DB->update_record('panopto', $data);
+
+    // Grant group access to the session we wish to use in this coursemodule.
+    $panoptoclient->grant_group_viewer_access_to_session($group->getId(), $data->panoptosessionid);
+
+    return true;
 }
 
 /**
