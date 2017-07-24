@@ -35,5 +35,5 @@ $string['pluginname'] = 'Panopto';
 $string['requiredaccesstime'] = 'Time access required for';
 $string['requiredaccesstime_desc'] = 'On the attempt to view Panopto video, any user who can access module will be added to the dedicated group on Panopto site and redirected to view video on Panopto. This setting defines how long (in hours) user will be able to access video via Panopto site. Access will be seised in a delay defind above, to view the video user will need to access it from Moodle again. If set to unlimited, user will be able to view video via Panopto site till the course module exists, despite whether she is still enrolled and can access the module or not.';
 $string['unlimited'] = 'Unlimited';
-$string['usereposettings'] = 'Use Panopto repository settings for Panopto server configuration details.';
+$string['usereposettings'] = 'This plugin requires Panopto repository plugin to be installed and <a href="{$a}">configured</a>.';
 $string['video'] = 'Video';

@@ -29,9 +29,9 @@ defined('MOODLE_INTERNAL') || die;
 if ($ADMIN->fulltree) {
     require_once($CFG->libdir . '/resourcelib.php');
 
-    $link = html_writer::link(new moodle_url('/admin/repository.php', array('repos' => 'panopto', 'action' => 'edit')),
-            get_string('usereposettings', 'panopto'));
-    $settings->add(new admin_setting_heading('panoptomodsettingslink', '', $link));
+    $url = new moodle_url('/admin/repository.php', array('repos' => 'panopto', 'action' => 'edit', 'sesskey' => sesskey()));
+    $notice = html_writer::div(get_string('usereposettings', 'panopto', $url->out()), 'warning form-item');
+    $settings->add(new admin_setting_heading('panoptomodsettingslink', '', $notice));
 
     $name = new lang_string('requiredaccesstime', 'mod_panopto');
     $options = array(
