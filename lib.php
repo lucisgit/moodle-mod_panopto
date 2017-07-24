@@ -186,13 +186,17 @@ function panopto_delete_instance($id) {
     }
 
     // TODO: Create a special event type for this API call and its proper logging.
-    // Instantiate Panopto client.
-    require_once($CFG->dirroot . "/repository/panopto/locallib.php");
-    $panoptoclient = new \repository_panopto_interface();
-    // Delete course module external group and instance record.
-    $panoptoclient->delete_group($panopto->panoptogroupid);
+    // If groupid defined, remove it remotely and from user access mapping.
+    if ($panopto->panoptogroupid) {
+        // Instantiate Panopto client.
+        require_once($CFG->dirroot . "/repository/panopto/locallib.php");
+        $panoptoclient = new \repository_panopto_interface();
+        // Delete course module external group and access mapping.
+        $panoptoclient->delete_group($panopto->panoptogroupid);
+        $DB->delete_records('panopto_user_access', array('panoptogroupid' => $panopto->panoptogroupid));
+    }
+    // Delete instance record.
     $DB->delete_records('panopto', array('id' => $panopto->id));
-    $DB->delete_records('panopto_user_access', array('panoptogroupid' => $panopto->panoptogroupid));
 
     return true;
 }
