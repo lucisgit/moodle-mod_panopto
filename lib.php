@@ -157,16 +157,26 @@ function panopto_update_instance($data, $mform) {
         // Instantiate Panopto client.
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
         $panoptoclient = new \repository_panopto_interface();
-        // Revoke group access from the previous session.
-        $panoptoclient->revoke_group_viewer_access_from_session($panopto->panoptogroupid, $panopto->panoptosessionid);
+        if ($panopto->panoptogroupid) {
+            // Revoke group access from the previous session.
+            $panoptoclient->revoke_group_viewer_access_from_session($panopto->panoptogroupid, $panopto->panoptosessionid);
+        } else {
+            // This should not happen really, but if module creation event has
+            // not been processed for some reason, we will have no group,
+            // so we need to create it and update instance record.
+            $cm = get_coursemodule_from_instance('panopto', $panopto->id);
+            $groupname = get_config('panopto', 'instancename') . '_cmid_' . $cm->id;
+            $group = $panoptoclient->create_external_group($groupname);
+            $panopto->panoptogroupid = $group->getId();
+        }
         // Grant group access to the new session.
         $panoptoclient->grant_group_viewer_access_to_session($panopto->panoptogroupid, $data->panoptosessionid);
+        $panopto->panoptosessionid = $data->panoptosessionid;
     }
 
     // Update instance record.
-    $data->id = $data->instance;
-    $data->timemodified = time();
-    $DB->update_record('panopto', $data);
+    $panopto->timemodified = time();
+    $DB->update_record('panopto', $panopto);
 
     return true;
 }
@@ -186,7 +196,7 @@ function panopto_delete_instance($id) {
     }
 
     // TODO: Create a special event type for this API call and its proper logging.
-    // If groupid defined, remove it remotely and from user access mapping.
+    // If groupid defined, remove external group and user access map records.
     if ($panopto->panoptogroupid) {
         // Instantiate Panopto client.
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
