@@ -66,6 +66,18 @@ if (!$session) {
     throw new invalid_parameter_exception(get_string('errorsessionnotfound', 'repository_panopto'));
 }
 
+if (!$panopto->panoptogroupid) {
+    // This should not happen really, but if module creation event has
+    // not been processed for some reason, we will have no group,
+    // so we need to create it and update instance record.
+    $groupname = get_config('panopto', 'instancename') . '_cmid_' . $cm->id;
+    $group = $panoptoclient->create_external_group($groupname);
+
+    // Update db record with Panopto group id.
+    $panopto->panoptogroupid = $group->getId();
+    $DB->update_record('panopto', $panopto);
+}
+
 // Grant access to the unique course module external group.
 $panoptoaccess = $DB->get_record('panopto_user_access', array('userid'=> $USER->id, 'panoptogroupid' => $panopto->panoptogroupid));
 if ($panoptoaccess) {
