@@ -175,6 +175,9 @@ function panopto_update_instance($data, $mform) {
     }
 
     // Update instance record.
+    $panopto->name = $data->name;
+    $panopto->intro = $data->intro;
+    $panopto->introformat = $data->introformat;
     $panopto->timemodified = time();
     $DB->update_record('panopto', $panopto);
 
