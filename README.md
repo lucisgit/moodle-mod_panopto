@@ -3,15 +3,15 @@ moodle-mod_panopto
 
 This is Panopto resource module plugin developed by Lancaster University to
 simplify using Panopto video recordings in Moodle courses. This plugin
-works differently to "offical" [Panopto
+works differently to offical [Panopto
 block](https://moodle.org/plugins/block_panopto) plugin. First, it does not
 sync enrolled users with the Folder on Panopto, instead it grants access
 directly to video, this eliminates the need to place recordings at certain
 folder in Panopto to make it available in Moodle. Second, it respects all
-Moodle resource availability features, such as group restiction or activity
+Moodle resource availability features, such as group restriction or activity
 completion. Finally, choosing a video is implemented as [repository
 plugin](https://github.com/lucisgit/moodle-repository_panopto),
-which makes navigation and chosing the right video much easier for teacher.
+which makes navigation and selecting the video much easier for teacher.
 
 In short, the plugin lets Moodle to decide if user is allowed to access
 video resource, and doing background work to provide access to recording on
@@ -49,22 +49,24 @@ functionlity.
 What happens under the bonnet
 -----------------------------
 
-When teacher adds video to Moodle (creates resource module in the course
+- When teacher adds video to Moodle (creates resource module in the course
 section), plugin creates Panopto external group named after unique
-`coursemodule` and link this group to particular video. When user clicks on
+`coursemodule` and link this group to particular video.
+- When user clicks on
 activity, the user is being added to this unique group temporally, so that
 she has access to view it, and then redirected to panopto video page for
-viewing. After some timeout (can be configured in plugin settings) the user
+viewing.
+- After some timeout window (can be configured in plugin settings) the user
 is removed from external group automatically (using regular task), to make
-sure there is no access permission remain in place irrespective to possible
-permission changes on Moodle. When user attempts to view activity again,
+sure there is no access permission remain in place.
+- When user attempts to view activity again,
 the system will verify if access is still in place and either will update
-access timestamp to reset access timeout or will add user to external group
+access window timestamp (to reset timeout) or will add user to external group
 again if access has been seized already.
-
-If activity is removed, its unique external group is deleted. If the same
-video added to different course, the new unique external group will be
-created and linked to video. While user access is granted on demand for
+- If activity is removed, its unique external group is deleted.
+- If the same video added to different course, the new unique external group will be
+created and linked to video.
+- While user access is granted on demand for
 short time and decay after timeout, all activity that user does on Panopto
 side is preserved, such as viewing statistics or comments on the video.
 
@@ -74,7 +76,7 @@ Installation
 This plugin requires Panopto [repository
 plugin](https://github.com/lucisgit/moodle-repository_panopto) to be installed and
 configured, it is using it for navigation through directory tree on Panopto
-side.
+side and other API calls.
 
 The actual installation is quite usual, just place plugin content at
 `./mod/panopto` directory and go though installation in Moodle admin interface.
@@ -86,9 +88,12 @@ a lot of confusion due to the differences in access rights allocation.
 Configuration
 -------------
 
-Global plugin configuration allows admin to set timeout after which
+Global plugin configuration allows admin to set timeout window after which
 temporal viewing permissions will be removed (see "[What happens under the
 bonnet](#what-happens-under-the-bonnet)" above).
+
+Also make sure that [repository
+plugin](https://github.com/lucisgit/moodle-repository_panopto) is [configured](https://github.com/lucisgit/moodle-repository_panopto#configuration) to use your Panopto site.
 
 Panopto API library
 -------------------
