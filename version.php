@@ -26,10 +26,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017052405;    // The current module version (Date: YYYYMMDDXX)
+$plugin->version   = 2018091400;
 $plugin->requires  = 2016052300;    // Requires Moodle 3.1
-$plugin->component = 'mod_panopto'; // Full name of the plugin (used for diagnostics)
-$plugin->maturity  = MATURITY_BETA; // Maturity Level is currently Release Candidate.
+$plugin->component = 'mod_panopto';
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->release   = '3.1+2018091400 (for Panopto 5.3+)';
 
 $plugin->dependencies = array(
     'repository_panopto' => ANY_VERSION
