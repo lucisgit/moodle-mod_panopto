@@ -2,39 +2,32 @@ moodle-mod_panopto
 ==================
 
 This is Panopto resource module plugin developed by Lancaster University to
-simplify using Panopto video recordings in Moodle courses. This plugin
-works differently to official [Panopto
-block](https://moodle.org/plugins/block_panopto) plugin. First, it does not
-sync enrolled users with the Folder on Panopto, instead it grants access
-directly to video, this eliminates the need to place recordings at certain
-folder in Panopto to make it available in Moodle. Second, it respects all
-Moodle resource availability features, such as group restriction or activity
-completion. Finally, choosing a video is implemented as [repository
-plugin](https://github.com/lucisgit/moodle-repository_panopto),
-which makes navigation and selecting the video much easier for teacher.
+simplify using Panopto video recordings in Moodle courses. This plugin works
+differently to official [Panopto
+block](https://moodle.org/plugins/block_panopto) plugin. First, it does not do
+rolling sync enrolled users with the Folder on Panopto, instead it grants
+access directly to video on demand. This eliminates the need to place
+recordings at certain folder in Panopto to make it available in Moodle and
+respects all Moodle resource availability features, such as group restriction
+or activity completion. Choosing a video is implemented as [repository
+plugin](https://github.com/lucisgit/moodle-repository_panopto), which makes
+navigation and selecting the video more convenient for teacher.
 
-In short, the plugin lets Moodle decide if user is allowed to access
-video resource, and does background work to provide access to recording on
-demand. This approach is somewhat simpler than used in official Panopto
-Block plugin and still secure, but might be not suitable for everyone.
+In short, the plugin lets Moodle decide if user is allowed to access video
+resource, and does background work to provide access to recording on demand.
+This approach is somewhat simpler than used in official Panopto Block plugin
+and still secure, but might be not suitable for everyone. 
 
 ### Features
 
-* This is resource module plugin, not a block, e.g it supports separate
-groups, availability, completion features.
-* No need to maintain a separate folder per course in Panopto and sync
-enrolled users for folder access.
-* Any video can be added to course irrespective of its location in Panopto
-folder stucture as long as teacher who adds it has editing or publishing
-rights.
-* Moving video to different folder will not break access, access is granted
-to video, not to folder.
+* This is resource module plugin, not a block, e.g it supports separate groups, availability, completion features.
+* Moodle resource module permission is the definitive source of authorisation, e.g. separate groups, availability features, category enrolments are respected.
+* Repository plugin makes navigation, searching and choosing the right video easier.
+* No need to maintain a separate folder per course in Panopto and sync enrolled users for folder access.
+* Any video can be added to course irrespective of its location in Panopto folder structure as long as teacher who adds it has editing or publishing rights.
+* Moving video to different folder will not break access, access is granted to video, not to folder.
 * Same video can be used in different courses, no need to duplicate it and place at different folders.
-* Moodle resource module permission is the definitive source of
-authorisation, e.g. separate groups, availability features, category enrolments are respected.
-* Repository plugin makes navigation, searching and chosing the right video easier.
-* Does not clash with manual permissions allocation via Panopto interface,
-you can grant user access manually to folder or video if required.
+* Does not clash with manual permissions allocation via Panopto interface, you can grant user access manually to folder or video if required.
 
 ### Use-case and a word of caution
 
