@@ -16,7 +16,9 @@ navigation and selecting the video more convenient for teacher.
 In short, the plugin lets Moodle decide if user is allowed to access video
 resource, and does background work to provide access to recording on demand.
 This approach is somewhat simpler than used in official Panopto Block plugin
-and still secure, but might be not suitable for everyone. 
+and still secure, but might be not suitable for everyone.
+
+<img src="https://moodle.org/pluginfile.php/50/local_plugins/plugin_screenshots/2151/panopto_pick_video_desc.png" width="600px" />
 
 ### Features
 
