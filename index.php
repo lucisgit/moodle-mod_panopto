@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,8 +25,8 @@
 
 require('../../config.php');
 
-$id = required_param('id', PARAM_INT); // course id
-$course = $DB->get_record('course', array('id'=>$id), '*', MUST_EXIST);
+$id = required_param('id', PARAM_INT);
+$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 require_course_login($course, true);
 
 // Prepare header.
@@ -68,7 +67,8 @@ foreach ($panoptoresources as $panoptoresource) {
         $linkcss = array('class' => 'dimmed');
     }
     $icon = $OUTPUT->pix_icon('icon', '', 'mod_panopto', array('class' => 'smallicon pluginicon'));
-    $link = $icon . html_writer::link(new moodle_url('/mod/panopto/view.php', array('id' => $panoptoresource->coursemodule)), $panoptoresource->name, $linkcss);
+    $link = $icon . html_writer::link(new moodle_url('/mod/panopto/view.php',
+        array('id' => $panoptoresource->coursemodule)), $panoptoresource->name, $linkcss);
 
     // Properly format the intro.
     $panoptoresource->intro = format_module_intro('panopto', $panoptoresource, $panoptoresource->coursemodule);

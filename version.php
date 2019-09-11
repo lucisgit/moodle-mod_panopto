@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2018091400;
-$plugin->requires  = 2016052300;    // Requires Moodle 3.1
+$plugin->requires  = 2016052300; // Requires Moodle 3.1.
 $plugin->component = 'mod_panopto';
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '3.1+2018091400 (for Panopto 5.3+)';

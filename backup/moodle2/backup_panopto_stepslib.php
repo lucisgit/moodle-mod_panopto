@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,13 +26,13 @@
 defined('MOODLE_INTERNAL') || die;
 
  /**
- * Defines the complete structure for backup.
- *
- * @package    mod_panopto
- * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
- * @author     Ruslan Kabalin (https://github.com/kabalin)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+  * Defines the complete structure for backup.
+  *
+  * @package    mod_panopto
+  * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
+  * @author     Ruslan Kabalin (https://github.com/kabalin)
+  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+  */
 class backup_panopto_activity_structure_step extends backup_activity_structure_step {
 
     protected function define_structure() {

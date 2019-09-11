@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,6 +24,8 @@
  */
 
 namespace mod_panopto\task;
+
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Panopto course module cron task.
@@ -61,7 +62,7 @@ class cron_task extends \core\task\scheduled_task {
             // array('external_group_id1' => array('userid1', 'userid2', ...), 'external_group_id2' => array(...), ...)
             $lastaccess = time() - ($delay * 3600);
             $panoptoaccess = $DB->get_records_sql('SELECT * from {panopto_user_access} WHERE timeaccessed < :lastaccess',
-                    array('lastaccess'=> $lastaccess));
+                    array('lastaccess' => $lastaccess));
             $removelist = array();
             foreach ($panoptoaccess as $accessrecord) {
                 if (!array_key_exists($accessrecord->panoptoextgroupid, $removelist)) {

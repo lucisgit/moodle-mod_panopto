@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['chooseavideo'] = 'Choose Panopto Video';
+$string['chooseavideo'] = 'Choose Panopto video';
 $string['crontask'] = 'Panopto course module: remote group membership clearing';
 $string['modulename'] = 'Panopto video';
 $string['modulename_help'] = 'The Panopto resource enables a teacher to create a reference to any Panopto video. Just pick the video using repository navigation interface and any student who have access to this resource in Moodle will be able to watch the video on Panopto server.';

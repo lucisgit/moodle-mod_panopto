@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -62,8 +61,8 @@ class backup_panopto_activity_task extends backup_activity_task {
 
         $base = preg_quote($CFG->wwwroot, "/");
 
-        $search="/(".$base."\/mod\/panopto\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@PANOPTOVIEWBYID*$2@$', $content);
+        $search = "/(".$base."\/mod\/panopto\/view.php\?id\=)([0-9]+)/";
+        $content = preg_replace($search, '$@PANOPTOVIEWBYID*$2@$', $content);
 
         return $content;
     }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -31,7 +30,7 @@ require_once($CFG->dirroot . "/repository/panopto/locallib.php");
 
 $id = required_param('id', PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'panopto');
-$panopto = $DB->get_record('panopto', array('id'=> $cm->instance), '*', MUST_EXIST);
+$panopto = $DB->get_record('panopto', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
@@ -79,7 +78,7 @@ if (!$panopto->panoptogroupid) {
 }
 
 // Grant access to the unique course module external group.
-$panoptoaccess = $DB->get_record('panopto_user_access', array('userid'=> $USER->id, 'panoptogroupid' => $panopto->panoptogroupid));
+$panoptoaccess = $DB->get_record('panopto_user_access', array('userid' => $USER->id, 'panoptogroupid' => $panopto->panoptogroupid));
 if ($panoptoaccess) {
     // Access mapping exist, update access timestamp.
     $panoptoaccess->timeaccessed = time();
