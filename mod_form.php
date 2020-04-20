@@ -44,15 +44,64 @@ class mod_panopto_mod_form extends moodleform_mod {
         }
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+        $this->standard_intro_elements();
 
         // Add Panoptopicker custom element.
         $mform->addElement('panoptopicker', 'panoptosessionid', get_string('video', 'panopto'));
         $mform->setType('panoptosessionid', PARAM_RAW_TRIMMED);
-        $mform->addRule('panoptosessionid', null, 'required', null, 'client');
+
+        // Add a text input field to enable a Panopto delivery id to be added manually.
+        $mform->addElement('text', 'panoptodeliveryid', get_string('deliveryid', 'panopto'));
+        $mform->setType('panoptodeliveryid', PARAM_TEXT);
+        $mform->setAdvanced('panoptodeliveryid');
+        $mform->addHelpButton('panoptodeliveryid', 'deliveryid', 'panopto');
+        $mform->disabledIf('panoptodeliveryid', 'panoptosessionid', 'neq', '');
 
         // Standard coursemodule things.
-        $this->standard_intro_elements();
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
+
+    /**
+     * Any data processing needed before the form is displayed.
+     *
+     * @param array $defaultvalues
+     */
+    public function data_preprocessing(&$defaultvalues) {
+        if (!empty($defaultvalues['panoptosessionid'])) {
+            $defaultvalues['panoptodeliveryid'] = $defaultvalues['panoptosessionid'];
+        }
+    }
+
+    /**
+     * Validate the submitted form data.
+     *
+     * @param array $data Array of submitted data (element_name => value)
+     * @param array $files Array of uploaded files (element_name => tmp_file_path)
+     * @return array If there are errors (element_name => error_description)
+     * @throws coding_exception
+     */
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        if (empty($data['panoptosessionid']) && empty($data['panoptodeliveryid'])) {
+            $errors['panoptosessionid'] = get_string('novideo', 'panopto');
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Allows module to modify the data returned by form get_data().
+     *
+     * @param stdClass $data The form data to be modified.
+     */
+    public function data_postprocessing($data) {
+        parent::data_postprocessing($data);
+
+        if (empty($data->panoptosessionid) && !empty($data->panoptodeliveryid)) {
+            $data->panoptosessionid = $data->panoptodeliveryid;
+        }
+    }
+
 }
