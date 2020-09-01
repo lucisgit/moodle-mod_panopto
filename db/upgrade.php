@@ -110,6 +110,29 @@ function xmldb_panopto_upgrade($oldversion) {
         // Panopto savepoint reached.
         upgrade_mod_savepoint(true, 2017052405, 'panopto');
     }
+    if ($oldversion < 2020080405) {
+        // Define table panopto_auth_url and create.
+        $table = new xmldb_table('panopto_auth_url');
 
+        // Adding fields to table panopto_auth_url.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('panoptosessionid', XMLDB_TYPE_CHAR, '36', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('panoptoauthurl', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $table->add_field('validuntil', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table panopto_auth_url.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Adding indexes to table panopto_auth_url.
+        $table->add_index('validuntil', XMLDB_INDEX_NOTUNIQUE, array('validuntil'));
+        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
+        $table->add_index('panoptosessionid', XMLDB_INDEX_NOTUNIQUE, array('panoptosessionid'));
+
+        // Conditionally launch create table for panopto_auth_url.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+    }
     return true;
 }

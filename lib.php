@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot . "/repository/panopto/locallib.php");
-
+require_once($CFG->dirroot . '/mod/panopto/classes/task/perms_task.php');
 /**
  * List of features supported in Panopto module
  * @param string $feature FEATURE_xx constant for requested feature
@@ -220,4 +220,64 @@ function panopto_delete_instance($id) {
     $DB->delete_records('panopto', array('id' => $panopto->id));
 
     return true;
+}
+
+/**
+ * Get an auth url which has not expired.
+ *
+ * @param stdClass $panopto
+ * @return bool|stdClass returns an auth url or false
+ */
+function panopto_get_auth_url($panopto) {
+    global $DB, $USER;
+
+    // Get the auth url.
+    $select = "userid = :userid AND panoptosessionid = :sessionid AND validuntil > :now";
+    $params = [
+        'userid'    => $USER->id,
+        'sessionid' => $panopto->panoptosessionid,
+        'now'       => time() + 1
+    ];
+
+    return $DB->get_record_select('panopto_auth_url', $select, $params, 'id, panoptoauthurl, validuntil');
+}
+
+/**
+ * Schedule the request of an auth url.
+ *
+ * @param stdClass $panopto
+ * @return bool|stdClass id of scheduled task or false
+ */
+function panopto_get_scheduled($panopto) {
+    global $DB, $USER;
+
+    // Check if we are scheduled already.
+    $select = "userid = :userid AND classname = :classname AND " . $DB->sql_like('customdata', ':sessionid');
+    $params = [
+        'userid'    => $USER->id,
+        'classname' => '\mod_panopto\task\perms_task',
+        'sessionid' => '%"panoptosessionid":"' . $panopto->panoptosessionid . '"%'
+    ];
+
+    return $DB->get_record_select('task_adhoc', $select, $params, 'id');
+}
+
+/**
+ * Schedule the request of an auth url using an adhoc task.
+ *
+ * @param int $cmid
+ * @param stdClass $panopto
+ */
+function panopto_schedule($cmid, $panopto) {
+    global $USER;
+
+    // Schedule the perms tasks.
+    $task = new mod_panopto\task\perms_task();
+    $task->set_userid($USER->id);
+    $task->set_custom_data([
+        'panopto' => $panopto,
+        'cmid'    => $cmid,
+    ]);
+
+    \core\task\manager::queue_adhoc_task($task);
 }
