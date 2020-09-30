@@ -1,0 +1,61 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_panopto/progress
+
+    Provides a template to display a progress bar while the user is waiting to view a video.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * id The id to give the progress bar container.
+    * width The max-width of the progress bar container.
+
+    Example context (json):
+    {
+        "id": "panopto_progress",
+        "width": "350"
+    }
+
+}}
+<div class="mod_panopto_progress">
+    {{> core/progress_bar }}
+</div>
+{{#js}}
+    require(['jquery'], function($) {
+        $('#panopto_progress').css('max-width', '{{width}}px');
+
+        var progressBar = $('#panopto_progress_bar');
+        progressBar.css('width', {{width}} - 30 + 'px');
+
+        function incProgress() {
+            var i = setInterval(function() {
+                var progress = progressBar.val();
+                if (progress < 100) {
+                    progressBar.val(progress + (1 - progress / 100));
+                } else {
+                    clearInterval(i);
+                }
+            }, 100);
+        }
+        incProgress();
+    });
+{{/js}}

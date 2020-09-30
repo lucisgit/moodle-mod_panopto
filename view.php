@@ -30,7 +30,7 @@ require_once($CFG->dirroot . "/repository/panopto/locallib.php");
 
 $id = required_param('id', PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'panopto');
-$panopto = $DB->get_record('panopto', array('id' => $cm->instance), '*', MUST_EXIST);
+$panoptoinstance = $DB->get_record('panopto', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
@@ -39,31 +39,83 @@ require_capability('mod/panopto:view', $context);
 // Trigger course_module_viewed event.
 $params = array(
     'context' => $context,
-    'objectid' => $panopto->id
+    'objectid' => $panoptoinstance->id
 );
 $event = \mod_panopto\event\course_module_viewed::create($params);
 $event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('panopto', $panopto);
+$event->add_record_snapshot('panopto', $panoptoinstance);
 $event->trigger();
 
 // Mark module as viewed for course completion.
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
 
-$PAGE->set_url('/mod/panopto/view.php', array('id' => $cm->id));
+// If there's an upgrade pending adhoc tasks will be suspended, so we have to resort to the old fashioned method.
+if (!get_config('panopto', 'asynchronousmode') || moodle_needs_upgrading()) {
+    // Instantiate Panopto client.
+    $panoptoclient = new repository_panopto_interface();
+    // Set current user.
+    $panoptoclient->set_authentication_info(
+        get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
 
-// Check if there is a valid auth url already.
-if ($panoptoauthurl = panopto_get_auth_url($panopto)) {
-    // Redirect user to the session page on Panopto side.
-    redirect($panoptoauthurl->panoptoauthurl);
-} else {
-    // It is either expired or doesn't exist, lets schedule a new request if there isn't already one scheduled.
-    if (!panopto_get_scheduled($panopto)) {
-        panopto_schedule($cm->id, $panopto);
-        echo "<p>scheduled</p>";
+    // Perform the call to Panopto API to obtain viewer url.
+    $session = $panoptoclient->get_session_by_id($panoptoinstance->panoptosessionid, true);
+    if (!$session) {
+        throw new invalid_parameter_exception(get_string('errorsessionnotfound', 'repository_panopto'));
     }
+
+    if (!$panoptoinstance->panoptogroupid) {
+        // This should not happen really, but if module creation event has
+        // not been processed for some reason, we will have no group,
+        // so we need to create it and update instance record.
+        $groupname = get_config('panopto', 'instancename') . '_cmid_' . $cm->id;
+        $group = $panoptoclient->create_external_group($groupname);
+
+        // Update db record with Panopto group id.
+        $panoptoinstance->panoptogroupid = $group->getId();
+        $DB->update_record('panopto', $panoptoinstance);
+    }
+
+    // Grant access to the unique course module external group.
+    $panoptoaccess = $DB->get_record('panopto_user_access',
+            array('userid' => $USER->id, 'panoptogroupid' => $panoptoinstance->panoptogroupid));
+    if ($panoptoaccess) {
+        // Access mapping exist, update access timestamp.
+        $panoptoaccess->timeaccessed = time();
+        $DB->update_record('panopto_user_access', $panoptoaccess);
+    } else {
+        // User needs to be added to the group and access mapping record needs to be created.
+        $panoptouser = $panoptoclient->sync_current_user();
+        $groupexternalid = get_config('panopto', 'instancename') . '_cmid_' . $cm->id;
+        $panoptoclient->add_member_to_external_group($groupexternalid, $panoptouser->getUserId());
+
+        $panoptoaccess = new \stdClass();
+        $panoptoaccess->userid = $USER->id;
+        $panoptoaccess->panoptouserid = $panoptouser->getUserId();
+        $panoptoaccess->panoptogroupid = $panoptoinstance->panoptogroupid;
+        $panoptoaccess->panoptoextgroupid = $groupexternalid;
+        $panoptoaccess->timeaccessed = time();
+        $DB->insert_record('panopto_user_access', $panoptoaccess);
+    }
+
+    // Make sure that group is linked to session.
+    $panoptoclient->grant_group_viewer_access_to_session($panoptoinstance->panoptogroupid, $panoptoinstance->panoptosessionid);
+
+    // Perform the call to Panopto API to obtain authenticated url.
+    $authurl = $panoptoclient->get_authenticated_url($session->getViewerUrl());
+
+    // Redirect user to the session page on Panopto side.
+    redirect($authurl);
 }
 
-// This should be done with jquery and a sensible holding page I dont have time to write!
-echo "<p><a href=''>Refresh</a> (this should be done with jquery or...)</p>";
+$PAGE->set_url('/mod/panopto/view.php', array('id' => $cm->id));
+$PAGE->set_title(format_string($panoptoinstance->name));
+$PAGE->set_heading(format_string($course->fullname));
+$PAGE->set_context($context);
+
+$output = $PAGE->get_renderer('mod_panopto');
+$panopto = new panopto($cm, $context, $panoptoinstance);
+echo $output->header();
+echo $output->render($panopto);
+echo $output->footer();
