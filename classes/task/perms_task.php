@@ -33,65 +33,14 @@ class perms_task extends \core\task\adhoc_task {
 
     public function execute() {
         global $CFG, $USER, $DB;
-        require_once($CFG->dirroot.'/mod/panopto/lib.php');
-        require_once($CFG->dirroot . "/repository/panopto/locallib.php");
-        $data = $this->get_custom_data();
 
+        require_once($CFG->dirroot . '/mod/panopto/locallib.php');
+
+        $data = $this->get_custom_data();
         $panopto = $data->panopto;
 
-        // Instantiate Panopto client.
-        $panoptoclient = new \repository_panopto_interface();
-        // Set current user.
-        $panoptoclient->set_authentication_info(
-            get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
-
-        // Perform the call to Panopto API to obtain viewer url.
-        $session = $panoptoclient->get_session_by_id($panopto->panoptosessionid, true);
-        if (!$session) {
-            throw new invalid_parameter_exception(get_string('errorsessionnotfound', 'repository_panopto'));
-        }
-
-        if (!$panopto->panoptogroupid) {
-            // This should not happen really, but if module creation event has
-            // not been processed for some reason, we will have no group,
-            // so we need to create it and update instance record.
-            $groupname = get_config('panopto', 'instancename') . '_cmid_' . $data->cmid;
-            $group = $panoptoclient->create_external_group($groupname);
-
-            // Update db record with Panopto group id.
-            $panopto->panoptogroupid = $group->getId();
-            $DB->update_record('panopto', $panopto);
-        }
-
-        // Grant access to the unique course module external group.
-        $conditions = [
-            'userid'         => $USER->id,
-            'panoptogroupid' => $panopto->panoptogroupid
-        ];
-        if ($panoptoaccess = $DB->get_record('panopto_user_access', $conditions)) {
-            // Access mapping exist, update access timestamp.
-            $panoptoaccess->timeaccessed = time();
-            $DB->update_record('panopto_user_access', $panoptoaccess);
-        } else {
-            // User needs to be added to the group and access mapping record needs to be created.
-            $panoptouser = $panoptoclient->sync_current_user();
-            $groupexternalid = get_config('panopto', 'instancename') . '_cmid_' . $data->cmid;
-            $panoptoclient->add_member_to_external_group($groupexternalid, $panoptouser->getUserId());
-
-            $panoptoaccess = new \stdClass();
-            $panoptoaccess->userid = $USER->id;
-            $panoptoaccess->panoptouserid = $panoptouser->getUserId();
-            $panoptoaccess->panoptogroupid = $panopto->panoptogroupid;
-            $panoptoaccess->panoptoextgroupid = $groupexternalid;
-            $panoptoaccess->timeaccessed = time();
-            $DB->insert_record('panopto_user_access', $panoptoaccess);
-        }
-
-        // Make sure that group is linked to session.
-        $panoptoclient->grant_group_viewer_access_to_session($panopto->panoptogroupid, $panopto->panoptosessionid);
-
-        // Perform the call to Panopto API to obtain authenticated url.
-        $authurl = $panoptoclient->get_authenticated_url($session->getViewerUrl());
+        // Set up remote permissions and get authenticated url.
+        $authurl = setup_remote_permissions($data->cmid, $panopto);
 
         // Save the url for the user to access.
         $panoptoauth = new \stdClass();

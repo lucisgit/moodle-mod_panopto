@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
-require_once($CFG->dirroot . '/mod/panopto/lib.php');
+require_once($CFG->dirroot . '/mod/panopto/locallib.php');
 
 /**
  * Library class for the Panopto module external API functions.
@@ -76,12 +76,12 @@ class mod_panopto_external extends external_api {
         $panopto = $DB->get_record('panopto', array('id' => $panoptoid), '*', MUST_EXIST);
 
         // Check if there is a valid auth url already.
-        if ($authurl = panopto_get_auth_url($panopto)) {
+        if ($authurl = get_valid_auth_url($panopto)) {
             return $authurl->panoptoauthurl;
         }
         // It is either expired or doesn't exist, let's schedule a new request if there isn't already one scheduled.
-        if (!panopto_get_scheduled($panopto)) {
-            panopto_schedule($context->instanceid, $panopto);
+        if (!get_scheduled_task($panopto)) {
+            schedule_task($context->instanceid, $panopto);
         }
     }
 
