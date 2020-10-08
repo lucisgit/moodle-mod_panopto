@@ -78,6 +78,9 @@ class cron_task extends \core\task\scheduled_task {
 
             // Finally, delete DB records.
             $DB->delete_records_list('panopto_user_access', 'id', array_keys($panoptoaccess));
+
+            // Remove old auth urls (they expire after 10s).
+            $DB->delete_records_select('panopto_auth_url', "validuntil < ?", [time()]);
         }
     }
 

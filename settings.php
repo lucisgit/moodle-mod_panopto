@@ -47,4 +47,12 @@ if ($ADMIN->fulltree) {
                                                     $description,
                                                     1,
                                                     $options));
+
+    $name = new lang_string('asynchronousmode', 'mod_panopto');
+    $description = new lang_string('asynchronousmode_desc', 'mod_panopto');
+    $options = [
+        0 => new lang_string('off', 'mod_panopto'),
+        1 => new lang_string('on', 'mod_panopto')
+    ];
+    $settings->add(new admin_setting_configselect('panopto/asynchronousmode', $name, $description, 0, $options));
 }

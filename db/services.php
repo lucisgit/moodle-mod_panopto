@@ -15,22 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Panopto course module version information.
+ * Web services for the Panopto module.
  *
- * @package    mod_panopto
- * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
- * @author     Ruslan Kabalin (https://github.com/kabalin)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_panopto
+ * @copyright   2020 Tony Butler <a.butler4@lancaster.ac.uk>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020100100;
-$plugin->requires  = 2018120300; // Requires Moodle 3.6.
-$plugin->component = 'mod_panopto';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '3.6+2020100100 (for Panopto 5.3+)';
-
-$plugin->dependencies = array(
-    'repository_panopto' => ANY_VERSION
-);
+$functions = [
+    'mod_panopto_get_auth' => [
+        'classname'   => 'mod_panopto_external',
+        'methodname'  => 'get_auth',
+        'classpath'   => 'mod/panopto/externallib.php',
+        'description' => 'Returns a Panopto auth url to enable the user to view a video',
+        'type'        => 'read',
+        'ajax'        => true
+    ]
+];

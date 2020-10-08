@@ -40,5 +40,22 @@
         <INDEX NAME="useridpanoptogroupid" UNIQUE="true" FIELDS="userid, panoptogroupid" />
       </INDEXES>
     </TABLE>
+    <TABLE NAME="panopto_auth_url" COMMENT="Auth URLs for successfully validated permissions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="panoptosessionid" TYPE="char" LENGTH="36" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="panoptoauthurl" TYPE="text" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="validuntil" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="validuntil" UNIQUE="false" FIELDS="validuntil" />
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" />
+        <INDEX NAME="panoptosessionid" UNIQUE="false" FIELDS="panoptosessionid" />
+      </INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>
