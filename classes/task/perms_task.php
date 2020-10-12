@@ -29,8 +29,19 @@ namespace mod_panopto\task;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Panopto remote permissions adhoc task.
+ *
+ * @package    mod_panopto
+ * @copyright  2020 Lancaster University (http://www.lancaster.ac.uk/)
+ * @author     Chris Lingwood
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class perms_task extends \core\task\adhoc_task {
 
+    /**
+     * Run an adhoc task to set up remote permissions.
+     */
     public function execute() {
         global $CFG, $USER, $DB;
 

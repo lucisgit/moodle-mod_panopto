@@ -46,6 +46,9 @@
         var progressBar = $('#panopto_progress_bar');
         progressBar.css('width', {{width}} - 30 + 'px');
 
+        /**
+         * Increment progress bar at an exponentially decreasing rate.
+         */
         function incProgress() {
             var i = setInterval(function() {
                 var progress = progressBar.val();

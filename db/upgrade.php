@@ -133,6 +133,9 @@ function xmldb_panopto_upgrade($oldversion) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+
+        // Panopto savepoint reached.
+        upgrade_mod_savepoint(true, 2020080405, 'panopto');
     }
     return true;
 }
