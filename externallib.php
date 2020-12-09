@@ -77,6 +77,9 @@ class mod_panopto_external extends external_api {
 
         // Check if there is a valid auth url already.
         if ($authurl = get_valid_auth_url($panopto)) {
+            if (empty($authurl->panoptoauthurl)) {
+                throw new moodle_exception('nourl', 'mod_panopto');
+            }
             return $authurl->panoptoauthurl;
         }
         // It is either expired or doesn't exist, let's schedule a new request if there isn't already one scheduled.

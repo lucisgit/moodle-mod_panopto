@@ -34,6 +34,7 @@ $string['modulename_help'] = 'The Panopto resource enables a teacher to create a
 $string['modulename_link'] = 'mod/panopto/view';
 $string['modulenameplural'] = 'Panopto videos';
 $string['nopermissions'] = 'Sorry, you don\'t have the necessary permissions to view this Panopto video.';
+$string['nourl'] = 'Sorry, this Panopto video is not currently available. Please try again later.';
 $string['novideo'] = 'You must either browse for and select a video, or enter a Panopto Delivery ID.';
 $string['off'] = 'Off';
 $string['on'] = 'On';

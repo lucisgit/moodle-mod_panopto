@@ -60,7 +60,12 @@ define(
                 setTimeout(function() {
                     getAuthUrl(contextId, panoptoId);
                 }, 1000);
-            }).fail(notification.exception);
+            }).fail(function(exception) {
+                str.get_string(exception.errorcode, 'mod_panopto').done(function(message) {
+                    $('#panopto_progress').replaceWith(message);
+                    $('.mod_panopto_progress').addClass('alert-warning p-2');
+                }).fail(notification.exception);
+            });
         }
 
         return {

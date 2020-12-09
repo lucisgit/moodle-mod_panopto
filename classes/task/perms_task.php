@@ -53,10 +53,10 @@ class perms_task extends \core\task\adhoc_task {
         // Set up remote permissions and get authenticated url.
         try {
             $authurl = setup_remote_permissions($data->cmid, $panopto);
-        } catch (\invalid_parameter_exception $exception) {
-            debugging("Caught exception while setting up remote permissions for panopto id {$panopto->id}: ");
+        } catch (\Exception $exception) {
+            debugging("Caught exception while setting up remote permissions for panopto instance {$panopto->id}: ");
             debugging($exception->getMessage() . "\n");
-            return;
+            $authurl = '';
         }
 
         // Save the url for the user to access.
