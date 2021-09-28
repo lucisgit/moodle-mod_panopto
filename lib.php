@@ -67,7 +67,7 @@ function panopto_get_extra_capabilities() {
 
 /**
  * This function is used by the reset_course_userdata function in moodlelib.
- * @param $data the data submitted from the reset course.
+ * @param stdClass $data the data submitted from the reset course.
  * @return array status array
  */
 function panopto_reset_userdata($data) {

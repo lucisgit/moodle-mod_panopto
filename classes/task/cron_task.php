@@ -58,8 +58,7 @@ class cron_task extends \core\task\scheduled_task {
             // Instantiate Panopto client.
             $panoptoclient = new \repository_panopto_interface();
 
-            // Build a list for users to remove in the array of the format
-            // array('external_group_id1' => array('userid1', 'userid2', ...), 'external_group_id2' => array(...), ...)
+            // Build an array of users to be removed from each external group.
             $lastaccess = time() - ($delay * 3600);
             $panoptoaccess = $DB->get_records_sql('SELECT * from {panopto_user_access} WHERE timeaccessed < :lastaccess',
                     array('lastaccess' => $lastaccess));

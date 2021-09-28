@@ -35,6 +35,11 @@ defined('MOODLE_INTERNAL') || die;
   */
 class backup_panopto_activity_structure_step extends backup_activity_structure_step {
 
+    /**
+     * Define the structure to be processed by this backup step.
+     *
+     * @return backup_nested_element
+     */
     protected function define_structure() {
 
         // Define each element separated.

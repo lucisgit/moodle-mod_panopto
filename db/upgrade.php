@@ -46,6 +46,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Panopto course module upgrade function.
+ *
+ * @param int $oldversion
+ * @return bool
+ */
 function xmldb_panopto_upgrade($oldversion) {
     global $CFG, $DB;
 

@@ -28,8 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/panopto/backup/moodle2/restore_panopto_stepslib.php');
 
 /**
- * Panopto restore task that provides all the settings and steps to perform one
- * complete restore of the activity.
+ * Task that provides all the settings and steps to perform a complete restore of a Panopto activity.
  *
  * @package    mod_panopto
  * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
@@ -79,9 +78,9 @@ class restore_panopto_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
+     * by the {@see \restore_logs_processor} when restoring
      * panopto logs. It must return one array
-     * of {@link restore_log_rule} objects.
+     * of {@see \restore_log_rule} objects.
      */
     static public function define_restore_log_rules() {
         $rules = array();

@@ -30,6 +30,9 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Panopto course module post install function.
+ */
 function xmldb_panopto_install() {
     global $CFG;
 }

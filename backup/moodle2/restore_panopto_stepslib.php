@@ -35,6 +35,11 @@ defined('MOODLE_INTERNAL') || die;
  */
 class restore_panopto_activity_structure_step extends restore_activity_structure_step {
 
+    /**
+     * Function that will return the structure to be processed by this restore_step.
+     *
+     * @return array of @restore_path_element elements
+     */
     protected function define_structure() {
 
         $paths = array();
@@ -44,6 +49,11 @@ class restore_panopto_activity_structure_step extends restore_activity_structure
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Process the activity path, informing the task about various ids, needed later.
+     *
+     * @param $data
+     */
     protected function process_panopto($data) {
         global $DB;
 
@@ -56,6 +66,9 @@ class restore_panopto_activity_structure_step extends restore_activity_structure
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * This method will be executed after the whole structure has been processed.
+     */
     protected function after_execute() {
         // Add panopto related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_panopto', 'intro', null);

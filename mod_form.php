@@ -28,8 +28,19 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once($CFG->dirroot . '/repository/panopto/form/panoptopicker.php');
 
+/**
+ * Panopto course module instance config form.
+ *
+ * @package    mod_panopto
+ * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
+ * @author     Ruslan Kabalin (https://github.com/kabalin)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_panopto_mod_form extends moodleform_mod {
 
+    /**
+     * Config form definition.
+     */
     public function definition() {
         global $CFG;
         $mform = $this->_form;
