@@ -52,7 +52,7 @@ class restore_panopto_activity_structure_step extends restore_activity_structure
     /**
      * Process the activity path, informing the task about various ids, needed later.
      *
-     * @param $data
+     * @param stdClass $data
      */
     protected function process_panopto($data) {
         global $DB;
