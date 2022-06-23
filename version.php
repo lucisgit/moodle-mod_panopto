@@ -25,11 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021092900;
-$plugin->requires  = 2018120300; // Requires Moodle 3.6.
+$plugin->version   = 2022062300;
+$plugin->requires  = 2022041900;
 $plugin->component = 'mod_panopto';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '3.6+2021092900 (for Panopto 5.3+)';
+$plugin->release   = '4.0+2022062300 (for Panopto 5.3+)';
 
 $plugin->dependencies = array(
     'repository_panopto' => ANY_VERSION
