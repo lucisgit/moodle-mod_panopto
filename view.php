@@ -64,6 +64,8 @@ $PAGE->set_title(format_string($panoptoinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
+$PAGE->add_body_class('limitedwidth');
+
 $output = $PAGE->get_renderer('mod_panopto');
 $panopto = new panopto($cm, $context, $panoptoinstance);
 echo $output->header();

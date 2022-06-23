@@ -81,12 +81,8 @@ class mod_panopto_renderer extends plugin_renderer_base {
      * @return string The HTML to output
      */
     protected function render_panopto(panopto $panopto) {
-        $out = $this->output->heading(format_string($panopto->name), 2);
-        $out .= $this->output->box(format_text($panopto->intro));
-
         if (!has_capability('mod/panopto:view', $panopto->context)) {
-            $out .= $this->output->notification(get_string('nopermissions', 'mod_panopto'), 'error');
-            return $this->output->container($out);
+            return $this->output->notification(get_string('nopermissions', 'mod_panopto'), 'error');
         }
 
         $params = [
@@ -95,7 +91,7 @@ class mod_panopto_renderer extends plugin_renderer_base {
         ];
         $this->page->requires->js_call_amd('mod_panopto/getauth', 'init', $params);
 
-        return $this->output->container($out, '', 'panopto_info');
+        return $this->output->container('', '', 'panopto_info');
     }
 
 }
