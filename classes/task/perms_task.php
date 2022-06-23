@@ -27,8 +27,6 @@
 
 namespace mod_panopto\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Panopto remote permissions adhoc task.
  *

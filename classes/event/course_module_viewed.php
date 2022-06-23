@@ -25,8 +25,6 @@
 
 namespace mod_panopto\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Panopto course module viewed event class.
  *

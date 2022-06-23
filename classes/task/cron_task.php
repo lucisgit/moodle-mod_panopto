@@ -25,8 +25,6 @@
 
 namespace mod_panopto\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Panopto course module cron task.
  *

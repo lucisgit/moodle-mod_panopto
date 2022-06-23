@@ -24,8 +24,6 @@
  */
 namespace mod_panopto\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * An event observer.
  * @copyright  2017 Lancaster University (http://www.lancaster.ac.uk/)
