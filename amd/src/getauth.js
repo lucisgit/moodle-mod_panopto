@@ -21,7 +21,6 @@
  *
  * @module      mod_panopto/getauth
  * @class       getauth
- * @package     mod_panopto
  * @copyright   2020 Tony Butler <a.butler4@lancaster.ac.uk>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
