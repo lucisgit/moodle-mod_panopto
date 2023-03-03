@@ -56,11 +56,11 @@ class panopto implements renderable {
      * @param stdClass $panoptoinstance The Panopto instance
      */
     public function __construct(cm_info $cm, context_module $context, stdClass $panoptoinstance) {
-        $this->cm      = $cm;
+        $this->cm = $cm;
         $this->context = $context;
-        $this->id      = $panoptoinstance->id;
-        $this->name    = $panoptoinstance->name;
-        $this->intro   = $panoptoinstance->intro;
+        $this->id = $panoptoinstance->id;
+        $this->name = $panoptoinstance->name;
+        $this->intro = $panoptoinstance->intro;
     }
 
 }

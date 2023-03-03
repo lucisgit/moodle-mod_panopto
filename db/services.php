@@ -26,11 +26,11 @@ defined('MOODLE_INTERNAL') || die();
 
 $functions = [
     'mod_panopto_get_auth' => [
-        'classname'   => 'mod_panopto_external',
-        'methodname'  => 'get_auth',
-        'classpath'   => 'mod/panopto/externallib.php',
+        'classname' => 'mod_panopto_external',
+        'methodname' => 'get_auth',
+        'classpath' => 'mod/panopto/externallib.php',
         'description' => 'Returns a Panopto auth url to enable the user to view a video',
-        'type'        => 'read',
-        'ajax'        => true
+        'type' => 'read',
+        'ajax' => true
     ]
 ];
