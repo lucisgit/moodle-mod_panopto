@@ -25,11 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$observers = array (
-    array (
+$observers = [
+     [
         'eventname' => '\core\event\course_module_created',
-        'callback' => '\mod_panopto\event\observer::course_module_created',
-        'internal' => false, // This means that we get events only after transaction commit.
-        'priority' => 1000,
-    ),
-);
+        'callback'  => '\mod_panopto\event\observer::course_module_created',
+        'internal'  => false, // This means that we get events only after transaction commit.
+        'priority'  => 1000,
+     ],
+];

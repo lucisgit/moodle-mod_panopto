@@ -41,11 +41,11 @@ class backup_panopto_activity_structure_step extends backup_activity_structure_s
     protected function define_structure() {
 
         // Define each element separated.
-        $panopto = new backup_nested_element('panopto', array('id'), array(
-            'name', 'intro', 'introformat', 'panoptosessionid', 'timemodified'));
+        $panopto = new backup_nested_element('panopto', ['id'],
+                ['name', 'intro', 'introformat', 'panoptosessionid', 'timemodified']);
 
         // Define sources.
-        $panopto->set_source_table('panopto', array('id' => backup::VAR_ACTIVITYID));
+        $panopto->set_source_table('panopto', ['id' => backup::VAR_ACTIVITYID]);
 
         // Return the root element (panopto), wrapped into standard activity structure.
         return $this->prepare_activity_structure($panopto);

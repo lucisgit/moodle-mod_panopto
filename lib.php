@@ -34,26 +34,20 @@ require_once($CFG->dirroot . "/repository/panopto/locallib.php");
  */
 function panopto_supports($feature) {
     switch($feature) {
-        case FEATURE_MOD_ARCHETYPE:
-            return MOD_ARCHETYPE_RESOURCE;
-        case FEATURE_GROUPS:
-            return false;
-        case FEATURE_GROUPINGS:
-            return false;
-        case FEATURE_MOD_INTRO:
-            return true;
-        case FEATURE_MOD_PURPOSE:
-            return MOD_PURPOSE_CONTENT;
-        case FEATURE_COMPLETION_TRACKS_VIEWS:
-            return true;
-        case FEATURE_GRADE_HAS_GRADE:
-            return false;
-        case FEATURE_GRADE_OUTCOMES:
-            return false;
         case FEATURE_BACKUP_MOODLE2:
-            return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+        case FEATURE_MOD_INTRO:
         case FEATURE_SHOW_DESCRIPTION:
             return true;
+        case FEATURE_GRADE_HAS_GRADE:
+        case FEATURE_GRADE_OUTCOMES:
+        case FEATURE_GROUPINGS:
+        case FEATURE_GROUPS:
+            return false;
+        case FEATURE_MOD_ARCHETYPE:
+            return MOD_ARCHETYPE_RESOURCE;
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_CONTENT;
         default:
             return null;
     }
@@ -64,7 +58,7 @@ function panopto_supports($feature) {
  * @return array
  */
 function panopto_get_extra_capabilities() {
-    return array('moodle/site:accessallgroups');
+    return ['moodle/site:accessallgroups'];
 }
 
 /**
@@ -73,7 +67,7 @@ function panopto_get_extra_capabilities() {
  * @return array status array
  */
 function panopto_reset_userdata($data) {
-    return array();
+    return [];
 }
 
 /**
@@ -81,7 +75,7 @@ function panopto_reset_userdata($data) {
  * @return array
  */
 function panopto_get_view_actions() {
-    return array('view', 'view all');
+    return ['view', 'view all'];
 }
 
 /**
@@ -89,7 +83,7 @@ function panopto_get_view_actions() {
  * @return array
  */
 function panopto_get_post_actions() {
-    return array('update', 'add');
+    return ['update', 'add'];
 }
 
 /**
@@ -125,7 +119,7 @@ function panopto_instance_created_callback($cmid, $instanceid) {
     global $DB, $CFG;
 
     // Get existing instance record.
-    if (!$data = $DB->get_record('panopto', array('id' => $instanceid))) {
+    if (!$data = $DB->get_record('panopto', ['id' => $instanceid])) {
         return false;
     }
 
@@ -157,12 +151,12 @@ function panopto_update_instance($data, $mform) {
     global $DB, $CFG;
 
     // Get existing instance record.
-    if (!$panopto = $DB->get_record('panopto', array('id' => $data->instance))) {
+    if (!$panopto = $DB->get_record('panopto', ['id' => $data->instance])) {
         return false;
     }
 
-    // TODO: Create a special event type for this API call and its proper logging.
     // If session has been changed, move this course module external group to the new session in Panopto.
+    // (TODO: Create a special event type for this API call and its proper logging).
     if ($panopto->panoptosessionid !== $data->panoptosessionid) {
         // Instantiate Panopto client.
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
@@ -204,22 +198,22 @@ function panopto_delete_instance($id) {
     global $DB, $CFG;
 
     // Get existing instance record.
-    if (!$panopto = $DB->get_record('panopto', array('id' => $id))) {
+    if (!$panopto = $DB->get_record('panopto', ['id' => $id])) {
         return false;
     }
 
-    // TODO: Create a special event type for this API call and its proper logging.
     // If groupid defined, remove external group and user access map records.
+    // (TODO: Create a special event type for this API call and its proper logging).
     if ($panopto->panoptogroupid) {
         // Instantiate Panopto client.
         require_once($CFG->dirroot . "/repository/panopto/locallib.php");
         $panoptoclient = new \repository_panopto_interface();
         // Delete course module external group and access mapping.
         $panoptoclient->delete_group($panopto->panoptogroupid);
-        $DB->delete_records('panopto_user_access', array('panoptogroupid' => $panopto->panoptogroupid));
+        $DB->delete_records('panopto_user_access', ['panoptogroupid' => $panopto->panoptogroupid]);
     }
     // Delete instance record.
-    $DB->delete_records('panopto', array('id' => $panopto->id));
+    $DB->delete_records('panopto', ['id' => $panopto->id]);
 
     return true;
 }

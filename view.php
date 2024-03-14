@@ -29,17 +29,17 @@ require_once($CFG->libdir . '/completionlib.php');
 
 $id = required_param('id', PARAM_INT);
 list ($course, $cm) = get_course_and_cm_from_cmid($id, 'panopto');
-$panoptoinstance = $DB->get_record('panopto', array('id' => $cm->instance), '*', MUST_EXIST);
+$panoptoinstance = $DB->get_record('panopto', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/panopto:view', $context);
 
 // Trigger course_module_viewed event.
-$params = array(
+$params = [
     'context' => $context,
-    'objectid' => $panoptoinstance->id
-);
+    'objectid' => $panoptoinstance->id,
+];
 $event = \mod_panopto\event\course_module_viewed::create($params);
 $event->add_record_snapshot('course_modules', $cm);
 $event->add_record_snapshot('course', $course);
@@ -59,7 +59,7 @@ if (!get_config('panopto', 'asynchronousmode') || moodle_needs_upgrading()) {
     redirect($authurl);
 }
 
-$PAGE->set_url('/mod/panopto/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/panopto/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($panoptoinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);

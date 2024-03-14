@@ -25,14 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'mod_panopto\task\cron_task',
-        'blocking' => 1,
-        'minute' => '0',
-        'hour' => '*',
-        'day' => '*',
-        'month' => '*',
-        'dayofweek' => '*'
-    )
-);
+        'blocking'  => 1,
+        'minute'    => '0',
+        'hour'      => '*',
+        'day'       => '*',
+        'month'     => '*',
+        'dayofweek' => '*',
+    ],
+];

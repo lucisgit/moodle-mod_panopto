@@ -28,19 +28,19 @@ defined('MOODLE_INTERNAL') || die;
 if ($ADMIN->fulltree) {
     require_once($CFG->libdir . '/resourcelib.php');
 
-    $url = new moodle_url('/admin/repository.php', array('repos' => 'panopto', 'action' => 'edit', 'sesskey' => sesskey()));
+    $url = new moodle_url('/admin/repository.php', ['repos' => 'panopto', 'action' => 'edit', 'sesskey' => sesskey()]);
     $notice = html_writer::div(get_string('usereposettings', 'panopto', $url->out()), 'warning form-item');
     $settings->add(new admin_setting_heading('panoptomodsettingslink', '', $notice));
 
     $name = new lang_string('requiredaccesstime', 'mod_panopto');
-    $options = array(
+    $options = [
         -1 => new lang_string('unlimited', 'mod_panopto'),
-        1 => new lang_string('numhours', '', 1),
-        2 => new lang_string('numhours', '', 2),
-        6 => new lang_string('numhours', '', 6),
+        1  => new lang_string('numhours', '', 1),
+        2  => new lang_string('numhours', '', 2),
+        6  => new lang_string('numhours', '', 6),
         12 => new lang_string('numhours', '', 12),
         24 => new lang_string('numhours', '', 24),
-    );
+    ];
     $description = new lang_string('requiredaccesstime_desc', 'mod_panopto');
     $settings->add(new admin_setting_configselect('panopto/requiredaccesstime',
                                                     $name,
@@ -52,7 +52,7 @@ if ($ADMIN->fulltree) {
     $description = new lang_string('asynchronousmode_desc', 'mod_panopto');
     $options = [
         0 => new lang_string('off', 'mod_panopto'),
-        1 => new lang_string('on', 'mod_panopto')
+        1 => new lang_string('on', 'mod_panopto'),
     ];
     $settings->add(new admin_setting_configselect('panopto/asynchronousmode', $name, $description, 0, $options));
 }

@@ -45,7 +45,7 @@ class mod_panopto_external extends external_api {
         return new external_function_parameters(
             [
                 'contextid' => new external_value(PARAM_INT, 'The context id of the Panopto instance'),
-                'panoptoid' => new external_value(PARAM_INT, 'The instance id of the Panopto instance')
+                'panoptoid' => new external_value(PARAM_INT, 'The instance id of the Panopto instance'),
             ]
         );
     }
@@ -63,7 +63,7 @@ class mod_panopto_external extends external_api {
 
         $parameters = [
             'contextid' => $contextid,
-            'panoptoid' => $panoptoid
+            'panoptoid' => $panoptoid,
         ];
         self::validate_parameters(self::get_auth_parameters(), $parameters);
         $context = self::get_context_from_params(['contextid' => $contextid]);
@@ -73,7 +73,7 @@ class mod_panopto_external extends external_api {
             throw new moodle_exception('nopermissions', 'mod_panopto');
         }
 
-        $panopto = $DB->get_record('panopto', array('id' => $panoptoid), '*', MUST_EXIST);
+        $panopto = $DB->get_record('panopto', ['id' => $panoptoid], '*', MUST_EXIST);
 
         // Check if there is a valid auth url already.
         if ($authurl = get_valid_auth_url($panopto)) {

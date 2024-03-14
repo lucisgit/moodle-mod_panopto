@@ -65,7 +65,7 @@ function xmldb_panopto_upgrade($oldversion) {
                 $panoptoresource->externalpanopto = $url->get_param('id');
                 $DB->update_record('panopto', $panoptoresource);
             } else {
-                $DB->delete_record('panopto', array('id' => $panoptoresource->id));
+                $DB->delete_record('panopto', ['id' => $panoptoresource->id]);
             }
         }
 
@@ -99,12 +99,12 @@ function xmldb_panopto_upgrade($oldversion) {
         $table->add_field('timeaccessed', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table panopto_user_access.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
         // Adding indexes to table panopto_user_access.
-        $table->add_index('timeaccessed', XMLDB_INDEX_NOTUNIQUE, array('timeaccessed'));
-        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
-        $table->add_index('useridpanoptogroupid', XMLDB_INDEX_UNIQUE, array('userid', 'panoptogroupid'));
+        $table->add_index('timeaccessed', XMLDB_INDEX_NOTUNIQUE, ['timeaccessed']);
+        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
+        $table->add_index('useridpanoptogroupid', XMLDB_INDEX_UNIQUE, ['userid', 'panoptogroupid']);
 
         // Conditionally launch create table for panopto_user_access.
         if (!$dbman->table_exists($table)) {
@@ -126,12 +126,12 @@ function xmldb_panopto_upgrade($oldversion) {
         $table->add_field('validuntil', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table panopto_auth_url.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
         // Adding indexes to table panopto_auth_url.
-        $table->add_index('validuntil', XMLDB_INDEX_NOTUNIQUE, array('validuntil'));
-        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
-        $table->add_index('panoptosessionid', XMLDB_INDEX_NOTUNIQUE, array('panoptosessionid'));
+        $table->add_index('validuntil', XMLDB_INDEX_NOTUNIQUE, ['validuntil']);
+        $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, ['userid']);
+        $table->add_index('panoptosessionid', XMLDB_INDEX_NOTUNIQUE, ['panoptosessionid']);
 
         // Conditionally launch create table for panopto_auth_url.
         if (!$dbman->table_exists($table)) {

@@ -57,9 +57,9 @@ class restore_panopto_activity_task extends restore_activity_task {
      * processed by the link decoder.
      */
     public static function define_decode_contents() {
-        $contents = array();
+        $contents = [];
 
-        $contents[] = new restore_decode_content('panopto', array('intro'), 'panopto');
+        $contents[] = new restore_decode_content('panopto', ['intro'], 'panopto');
 
         return $contents;
     }
@@ -69,7 +69,7 @@ class restore_panopto_activity_task extends restore_activity_task {
      * to the activity to be executed by the link decoder.
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_decode_rule('PANOPTOVIEWBYID', '/mod/panopto/view.php?id=$1', 'course_module');
 
@@ -83,7 +83,7 @@ class restore_panopto_activity_task extends restore_activity_task {
      * of {@see \restore_log_rule} objects.
      */
     public static function define_restore_log_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('panopto', 'view', 'view.php?id={course_module}', '{panopto}');
 

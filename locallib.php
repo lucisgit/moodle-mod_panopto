@@ -63,8 +63,8 @@ function setup_remote_permissions($cmid, $panopto) {
 
     // Grant access to the unique course module external group.
     $conditions = [
-        'userid' => $USER->id,
-        'panoptogroupid' => $panopto->panoptogroupid
+        'userid'         => $USER->id,
+        'panoptogroupid' => $panopto->panoptogroupid,
     ];
     if ($panoptoaccess = $DB->get_record('panopto_user_access', $conditions)) {
         // Access mapping exist, update access timestamp.
@@ -104,9 +104,9 @@ function get_valid_auth_url($panopto) {
     // Get the auth url.
     $select = "userid = :userid AND panoptosessionid = :sessionid AND validuntil > :now";
     $params = [
-        'userid' => $USER->id,
+        'userid'    => $USER->id,
         'sessionid' => $panopto->panoptosessionid,
-        'now' => time() + 1
+        'now'       => time() + 1,
     ];
 
     return $DB->get_record_select('panopto_auth_url', $select, $params, 'id, panoptoauthurl, validuntil');
@@ -124,9 +124,9 @@ function get_scheduled_task($panopto) {
     // Check if we are scheduled already.
     $select = "userid = :userid AND classname = :classname AND " . $DB->sql_like('customdata', ':sessionid');
     $params = [
-        'userid' => $USER->id,
+        'userid'    => $USER->id,
         'classname' => '\mod_panopto\task\perms_task',
-        'sessionid' => '%"panoptosessionid":"' . $panopto->panoptosessionid . '"%'
+        'sessionid' => '%"panoptosessionid":"' . $panopto->panoptosessionid . '"%',
     ];
 
     return $DB->get_record_select('task_adhoc', $select, $params, 'id');
@@ -146,7 +146,7 @@ function schedule_task($cmid, $panopto) {
     $task->set_userid($USER->id);
     $task->set_custom_data([
         'panopto' => $panopto,
-        'cmid' => $cmid,
+        'cmid'    => $cmid,
     ]);
 
     \core\task\manager::queue_adhoc_task($task);

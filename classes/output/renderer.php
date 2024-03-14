@@ -56,11 +56,11 @@ class panopto implements renderable {
      * @param stdClass $panoptoinstance The Panopto instance
      */
     public function __construct(cm_info $cm, context_module $context, stdClass $panoptoinstance) {
-        $this->cm = $cm;
+        $this->cm      = $cm;
         $this->context = $context;
-        $this->id = $panoptoinstance->id;
-        $this->name = $panoptoinstance->name;
-        $this->intro = $panoptoinstance->intro;
+        $this->id      = $panoptoinstance->id;
+        $this->name    = $panoptoinstance->name;
+        $this->intro   = $panoptoinstance->intro;
     }
 
 }
@@ -87,7 +87,7 @@ class mod_panopto_renderer extends plugin_renderer_base {
 
         $params = [
             'contextid' => $panopto->context->id,
-            'panoptoid' => $panopto->id
+            'panoptoid' => $panopto->id,
         ];
         $this->page->requires->js_call_amd('mod_panopto/getauth', 'init', $params);
 

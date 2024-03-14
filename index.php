@@ -26,7 +26,7 @@
 require('../../config.php');
 
 $id = required_param('id', PARAM_INT);
-$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 require_course_login($course, true);
 
 // Prepare header.
@@ -36,7 +36,7 @@ $strdescription = get_string('description');
 $strsectionname = get_string('sectionname', 'format_' . $course->format);
 
 $PAGE->set_pagelayout('incourse');
-$PAGE->set_url('/mod/panopto/index.php', array('id' => $course->id));
+$PAGE->set_url('/mod/panopto/index.php', ['id' => $course->id]);
 $PAGE->set_title($course->shortname.': ' . $strpanoptos);
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add($strpanoptos);
@@ -55,37 +55,35 @@ if ($usesections) {
 
 $table = new html_table();
 if ($usesections) {
-    $table->head = array($strsectionname, $strname, $strdescription);
+    $table->head = [$strsectionname, $strname, $strdescription];
 } else {
-    $table->head = array($strname, $strdescription);
+    $table->head = [$strname, $strdescription];
 }
 
 foreach ($panoptoresources as $panoptoresource) {
     // Link to resource.
     $linkcss = null;
     if (!$panoptoresource->visible) {
-        $linkcss = array('class' => 'dimmed');
+        $linkcss = ['class' => 'dimmed'];
     }
-    $icon = $OUTPUT->pix_icon('icon', '', 'mod_panopto', array('class' => 'smallicon pluginicon'));
-    $link = $icon . html_writer::link(new moodle_url('/mod/panopto/view.php',
-        array('id' => $panoptoresource->coursemodule)), $panoptoresource->name, $linkcss);
+    $icon = $OUTPUT->pix_icon('icon', '', 'mod_panopto', ['class' => 'smallicon pluginicon']);
+    $link = $icon . html_writer::link(new moodle_url('/mod/panopto/view.php', ['id' => $panoptoresource->coursemodule]),
+            $panoptoresource->name, $linkcss);
 
     // Properly format the intro.
     $panoptoresource->intro = format_module_intro('panopto', $panoptoresource, $panoptoresource->coursemodule);
 
     if ($usesections) {
-        $table->data[] = array(get_section_name($course, $sections[$panoptoresource->section]), $link, $panoptoresource->intro);
+        $table->data[] = [get_section_name($course, $sections[$panoptoresource->section]), $link, $panoptoresource->intro];
     } else {
-        $table->data[] = array($link, $panoptoresource->intro);
+        $table->data[] = [$link, $panoptoresource->intro];
     }
 }
 
 echo html_writer::table($table);
 
 // Log accessing this page.
-$params = array(
-    'context' => context_course::instance($course->id)
-);
+$params = ['context' => context_course::instance($course->id)];
 $event = \mod_panopto\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();

@@ -59,11 +59,11 @@ class cron_task extends \core\task\scheduled_task {
             // Build an array of users to be removed from each external group.
             $lastaccess = time() - ($delay * 3600);
             $panoptoaccess = $DB->get_records_sql('SELECT * from {panopto_user_access} WHERE timeaccessed < :lastaccess',
-                    array('lastaccess' => $lastaccess));
-            $removelist = array();
+                    ['lastaccess' => $lastaccess]);
+            $removelist = [];
             foreach ($panoptoaccess as $accessrecord) {
                 if (!array_key_exists($accessrecord->panoptoextgroupid, $removelist)) {
-                    $removelist[$accessrecord->panoptoextgroupid] = array();
+                    $removelist[$accessrecord->panoptoextgroupid] = [];
                 }
                 array_push($removelist[$accessrecord->panoptoextgroupid], $accessrecord->panoptouserid);
             }
