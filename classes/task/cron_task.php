@@ -34,7 +34,6 @@ namespace mod_panopto\task;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class cron_task extends \core\task\scheduled_task {
-
     /**
      * Get a descriptive name for this task (shown to admins).
      *
@@ -58,8 +57,10 @@ class cron_task extends \core\task\scheduled_task {
 
             // Build an array of users to be removed from each external group.
             $lastaccess = time() - ($delay * 3600);
-            $panoptoaccess = $DB->get_records_sql('SELECT * from {panopto_user_access} WHERE timeaccessed < :lastaccess',
-                    ['lastaccess' => $lastaccess]);
+            $panoptoaccess = $DB->get_records_sql(
+                'SELECT * from {panopto_user_access} WHERE timeaccessed < :lastaccess',
+                ['lastaccess' => $lastaccess]
+            );
             $removelist = [];
             foreach ($panoptoaccess as $accessrecord) {
                 if (!array_key_exists($accessrecord->panoptoextgroupid, $removelist)) {
@@ -80,5 +81,4 @@ class cron_task extends \core\task\scheduled_task {
             $DB->delete_records_select('panopto_auth_url', "validuntil < ?", [time()]);
         }
     }
-
 }

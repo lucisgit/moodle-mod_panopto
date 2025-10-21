@@ -36,7 +36,6 @@ require_once($CFG->dirroot . '/mod/panopto/backup/moodle2/restore_panopto_stepsl
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_panopto_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have.
      */

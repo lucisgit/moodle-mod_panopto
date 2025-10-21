@@ -35,7 +35,6 @@ require_once($CFG->dirroot . '/mod/panopto/locallib.php');
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_panopto_external extends external_api {
-
     /**
      * Returns a description of the parameters for the get_auth method.
      *
@@ -96,5 +95,4 @@ class mod_panopto_external extends external_api {
     public static function get_auth_returns() {
         return new external_value(PARAM_URL, 'The auth url to view the video');
     }
-
 }

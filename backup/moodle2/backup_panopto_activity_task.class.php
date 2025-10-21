@@ -36,7 +36,6 @@ require_once($CFG->dirroot . '/mod/panopto/backup/moodle2/backup_panopto_stepsli
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_panopto_activity_task extends backup_activity_task {
-
     /**
      * No specific settings for this activity.
      */
@@ -61,7 +60,7 @@ class backup_panopto_activity_task extends backup_activity_task {
 
         $base = preg_quote($CFG->wwwroot, "/");
 
-        $search = "/(".$base."\/mod\/panopto\/view.php\?id\=)([0-9]+)/";
+        $search = "/(" . $base . "\/mod\/panopto\/view.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@PANOPTOVIEWBYID*$2@$', $content);
 
         return $content;

@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/repository/panopto/form/panoptopicker.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_panopto_mod_form extends moodleform_mod {
-
     /**
      * Config form definition.
      */
@@ -114,5 +113,4 @@ class mod_panopto_mod_form extends moodleform_mod {
             $data->panoptosessionid = $data->panoptodeliveryid;
         }
     }
-
 }

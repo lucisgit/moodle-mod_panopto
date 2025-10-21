@@ -37,7 +37,7 @@ $strsectionname = get_string('sectionname', 'format_' . $course->format);
 
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_url('/mod/panopto/index.php', ['id' => $course->id]);
-$PAGE->set_title($course->shortname.': ' . $strpanoptos);
+$PAGE->set_title($course->shortname . ': ' . $strpanoptos);
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add($strpanoptos);
 echo $OUTPUT->header();
@@ -67,8 +67,11 @@ foreach ($panoptoresources as $panoptoresource) {
         $linkcss = ['class' => 'dimmed'];
     }
     $icon = $OUTPUT->pix_icon('icon', '', 'mod_panopto', ['class' => 'smallicon pluginicon']);
-    $link = $icon . html_writer::link(new moodle_url('/mod/panopto/view.php', ['id' => $panoptoresource->coursemodule]),
-            $panoptoresource->name, $linkcss);
+    $link = $icon . html_writer::link(
+        new moodle_url('/mod/panopto/view.php', ['id' => $panoptoresource->coursemodule]),
+        $panoptoresource->name,
+        $linkcss
+    );
 
     // Properly format the intro.
     $panoptoresource->intro = format_module_intro('panopto', $panoptoresource, $panoptoresource->coursemodule);

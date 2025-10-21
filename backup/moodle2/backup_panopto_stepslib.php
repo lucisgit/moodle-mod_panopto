@@ -32,7 +32,6 @@
   * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
   */
 class backup_panopto_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Define the structure to be processed by this backup step.
      *
@@ -41,8 +40,11 @@ class backup_panopto_activity_structure_step extends backup_activity_structure_s
     protected function define_structure() {
 
         // Define each element separated.
-        $panopto = new backup_nested_element('panopto', ['id'],
-                ['name', 'intro', 'introformat', 'panoptosessionid', 'timemodified']);
+        $panopto = new backup_nested_element(
+            'panopto',
+            ['id'],
+            ['name', 'intro', 'introformat', 'panoptosessionid', 'timemodified']
+        );
 
         // Define sources.
         $panopto->set_source_table('panopto', ['id' => backup::VAR_ACTIVITYID]);

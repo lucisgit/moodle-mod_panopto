@@ -23,12 +23,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_panopto\output\panopto;
+
 require('../../config.php');
 require_once($CFG->dirroot . '/mod/panopto/locallib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 $id = required_param('id', PARAM_INT);
-list ($course, $cm) = get_course_and_cm_from_cmid($id, 'panopto');
+[$course, $cm] = get_course_and_cm_from_cmid($id, 'panopto');
 $panoptoinstance = $DB->get_record('panopto', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_course_login($course, true, $cm);

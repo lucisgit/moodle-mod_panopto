@@ -42,11 +42,15 @@ if ($ADMIN->fulltree) {
         24 => new lang_string('numhours', '', 24),
     ];
     $description = new lang_string('requiredaccesstime_desc', 'mod_panopto');
-    $settings->add(new admin_setting_configselect('panopto/requiredaccesstime',
-                                                    $name,
-                                                    $description,
-                                                    1,
-                                                    $options));
+    $settings->add(
+        new admin_setting_configselect(
+            'panopto/requiredaccesstime',
+            $name,
+            $description,
+            1,
+            $options
+        )
+    );
 
     $name = new lang_string('asynchronousmode', 'mod_panopto');
     $description = new lang_string('asynchronousmode_desc', 'mod_panopto');

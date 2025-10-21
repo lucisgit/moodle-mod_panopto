@@ -24,33 +24,46 @@
 
 namespace mod_panopto\output;
 
-use core\output\plugin_renderer_base;
+use cm_info;
+use context_module;
+use core\output\renderable;
+use stdClass;
 
 /**
- * Panopto renderer class.
+ * Panopto renderable class.
  *
  * @package     mod_panopto
  * @copyright   2020 Tony Butler <a.butler4@lancaster.ac.uk>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderer extends plugin_renderer_base {
+class panopto implements renderable {
+    /** @var stdClass The course module info object */
+    public $cm;
+
+    /** @var context_module The module context object */
+    public $context;
+
+    /** @var int The Panopto instance id */
+    public $id;
+
+    /** @var string The Panopto video name */
+    public $name;
+
+    /** @var string The Panopto video intro */
+    public $intro;
+
     /**
-     * Renders a Panopto instance.
+     * Panopto renderable constructor.
      *
-     * @param panopto $panopto Panopto renderable
-     * @return string The HTML to output
+     * @param cm_info $cm The course module info object
+     * @param context_module $context The module context object
+     * @param stdClass $panoptoinstance The Panopto instance
      */
-    protected function render_panopto(panopto $panopto) {
-        if (!has_capability('mod/panopto:view', $panopto->context)) {
-            return $this->output->notification(get_string('nopermissions', 'mod_panopto'), 'error');
-        }
-
-        $params = [
-            'contextid' => $panopto->context->id,
-            'panoptoid' => $panopto->id,
-        ];
-        $this->page->requires->js_call_amd('mod_panopto/getauth', 'init', $params);
-
-        return $this->output->container('', '', 'panopto_info');
+    public function __construct(cm_info $cm, context_module $context, stdClass $panoptoinstance) {
+        $this->cm      = $cm;
+        $this->context = $context;
+        $this->id      = $panoptoinstance->id;
+        $this->name    = $panoptoinstance->name;
+        $this->intro   = $panoptoinstance->intro;
     }
 }

@@ -36,7 +36,6 @@ namespace mod_panopto\task;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class perms_task extends \core\task\adhoc_task {
-
     /**
      * Run an adhoc task to set up remote permissions.
      */

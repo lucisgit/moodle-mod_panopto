@@ -33,7 +33,7 @@ require_once($CFG->dirroot . "/repository/panopto/locallib.php");
  * @return mixed True if module supports feature, false if not, null if doesn't know
  */
 function panopto_supports($feature) {
-    switch($feature) {
+    switch ($feature) {
         case FEATURE_BACKUP_MOODLE2:
         case FEATURE_COMPLETION_TRACKS_VIEWS:
         case FEATURE_MOD_INTRO:

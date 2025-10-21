@@ -41,7 +41,10 @@ function setup_remote_permissions($cmid, $panopto) {
     $panoptoclient = new \repository_panopto_interface();
     // Set current user.
     $panoptoclient->set_authentication_info(
-            get_config('panopto', 'instancename') . '\\' . $USER->username, '', get_config('panopto', 'applicationkey'));
+        get_config('panopto', 'instancename') . '\\' . $USER->username,
+        '',
+        get_config('panopto', 'applicationkey')
+    );
 
     // Perform the call to Panopto API to obtain viewer url.
     $session = $panoptoclient->get_session_by_id($panopto->panoptosessionid, true);
