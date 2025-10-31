@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2024031400;
-$plugin->requires = 2022041900;
+$plugin->version = 2025103100;
+$plugin->requires = 2025041400;
 $plugin->component = 'mod_panopto';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.0+2024031400 (for Panopto 5.3+)';
+$plugin->release = '5.0+2025103100 (for Panopto 5.3+)';
 
 $plugin->dependencies = ['repository_panopto' => ANY_VERSION];
