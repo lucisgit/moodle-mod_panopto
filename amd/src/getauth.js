@@ -96,7 +96,8 @@ export const init = async(contextId, panoptoId) => {
             },
         }]);
 
-        request[0].then((authUrl) => {
+        try {
+            const authUrl = await request[0];
             if (typeof authUrl === 'string') {
                 const done = new CustomEvent('update', {
                     detail: {
@@ -110,7 +111,7 @@ export const init = async(contextId, panoptoId) => {
             setTimeout(() => {
                 getAuthUrl(contextId, panoptoId);
             }, 1000);
-        }).catch(async(exception) => {
+        } catch (exception) {
             const message = await getString(exception.errorcode, 'mod_panopto');
             const failed = new CustomEvent('update', {
                 detail: {
@@ -123,7 +124,7 @@ export const init = async(contextId, panoptoId) => {
             clearInterval(intervalId);
             const progressStatus = document.getElementById('panopto_progress_status');
             progressStatus.classList.remove('text-truncate');
-        });
+        }
     };
 
     // Start polling for an auth url.
